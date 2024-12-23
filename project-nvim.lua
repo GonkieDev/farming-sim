@@ -41,6 +41,7 @@ local commands = {
 	OdinDocsOpenGL = { cmd = open_url .. "https://pkg.odin-lang.org/vendor/OpenGL", key = "<leader>dg" },
 
 	OpenDebugger = { cmd = "raddbg -profile:debugger.raddbg_profile" },
+	-- PackageAsepritePlugin = { cmd = "aseprite_plugin\\package_aseprite_plugin.bat", key = "<F3>" },
 }
 
 return { commands = commands, version = 1 }
