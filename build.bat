@@ -48,7 +48,7 @@ set extra_flags=-strict-style -vet-style -vet-semicolon -vet-unused-imports -col
 if "%debug%"=="1" set extra_flags=%extra_flags% -debug -o:none
 if "%release%"=="1" set extra_flags=%extra_flags% -o:speed -no-bounds-check -subsystem:windows
 
-set compile=odin build %src_dir% -out:%target%.exe %extra_flags%
+set compile=odin build %src_dir%\win32 -out:%target%.exe %extra_flags%
 
 echo [Building main]
 echo [Compile cmd]: "%compile%"

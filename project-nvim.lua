@@ -19,6 +19,12 @@ local commands = {
 		key = "<F9>",
 	},
 
+	BuildAsepriteExporter = {
+		cmd = ".\\code\\aseprite_exporter\\build.bat debug",
+		errorformat = "Odin",
+		key = "<F10>",
+	},
+
 	--
 	-- Run ------------------------------------------------------
 	--
@@ -27,8 +33,9 @@ local commands = {
 		key = "<F2>",
 	},
 
-	RunDebugger = {
-		cmd = "pushd bin && raddbg game.exe && popd",
+	RunAsepriteExporter = {
+		cmd = ".\\code\\aseprite_exporter\\build.bat run",
+		errorformat = "Odin",
 		key = "<F1>",
 	},
 

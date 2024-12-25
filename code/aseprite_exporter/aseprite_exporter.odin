@@ -26,7 +26,8 @@ main :: proc() {
 	options := Options{.Log_Tags, .Log_Layers, .Output_To_File}
 	//ase_export_from_file("../assets/playre.aseprite", options)
 	//ase_export_from_file("../assets/guy.aseprite", options)
-	ase_export_from_file("../assets/tests.aseprite", options)
+	//ase_export_from_file("../assets/tests.aseprite", options)
+	ase_export_from_file("../../assets/Player.aseprite", options)
 
 }
 
@@ -142,7 +143,7 @@ ase_export_from_buffer :: proc(
 						layer_group.layer_chunk.name,
 						frame_idx,
 					)
-					dir := filepath.join({tag.name, layer_group.layer_chunk.name})
+					dir := filepath.join({"./test_output", tag.name, layer_group.layer_chunk.name})
 					write_to_file(tag.name, layer_group.layer_chunk.name, filename, &raw_sprite)
 				}
 
@@ -426,9 +427,9 @@ layer_attributes_str_check :: proc(
 	type: Ase_Layer_Type,
 ) {
 	atribs := layer_attributes_str_from_layer_chunk(layer_chunk)
-	is_normal := s.contains(atribs, "n")
-	is_mod := s.contains(atribs, "m")
-	ignore = s.contains(atribs, "i")
+	is_normal := s.contains(atribs, "N")
+	is_mod := s.contains(atribs, "M")
+	ignore = s.contains(atribs, "I")
 	if !ignore {
 		if is_mod {
 			if is_normal {
@@ -444,7 +445,7 @@ layer_attributes_str_check :: proc(
 
 layer_chunk_should_ignore :: proc(layer_chunk: ^ase.Layer_Chunk) -> bool {
 	atribs := layer_attributes_str_from_layer_chunk(layer_chunk)
-	ignore := s.contains(atribs, "i")
+	ignore := s.contains(atribs, "I")
 	return ignore
 }
 
