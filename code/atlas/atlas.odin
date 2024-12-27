@@ -83,10 +83,10 @@ atlas_reserve :: proc(
 	if size > atlas.biggest_size do return
 	if size < atlas.smallest_size do size = atlas.smallest_size
 
-	aligned_rect := atlas_size_align(size)
-	result.tex_idx = atlas_available_texture_from_rect(atlas, aligned_rect)
-	if result.tex_idx != -1 {
-		result.tex_idx = atlas_allocate_new_texture(atlas, size, is_mask)
+	aligned_size := atlas_size_align(size)
+	result.tex_idx = atlas_available_texture_from_rect(atlas, aligned_size)
+	if result.tex_idx == -1 {
+		result.tex_idx = atlas_allocate_new_texture(atlas, aligned_size, is_mask)
 		assert(result.tex_idx != -1)
 	}
 
@@ -119,15 +119,13 @@ atlas_delete_block :: proc(atlas: ^Atlas, atlas_result: Atlas_Result) {
 
 atlas_allocate_new_texture :: proc(atlas: ^Atlas, size: int, is_mask: bool) -> int {
 	assert(size <= TEXTURE_SIZE)
+	atlas_assert_size_is_aligned(size)
 	regions_count := TEXTURE_SIZE / size
 	regions_count *= regions_count
 	texture := Atlas_Texture {
 		region_size = size,
 		regions     = make([]Region, regions_count, atlas.allocator),
 	}
-
-	_, err := append(&atlas.textures, texture)
-	assert(err == nil)
 
 	upload_ok: bool
 	texture.render_key, upload_ok = render.texture_upload_from_data(
@@ -139,6 +137,9 @@ atlas_allocate_new_texture :: proc(atlas: ^Atlas, size: int, is_mask: bool) -> i
 		generate_mips = false,
 	)
 	assert(upload_ok)
+
+	_, err := append(&atlas.textures, texture)
+	assert(err == nil)
 
 	return len(atlas.textures) - 1
 }

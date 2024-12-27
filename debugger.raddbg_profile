@@ -3,25 +3,45 @@
 /// watches ///////////////////////////////////////////////////////////////////
 
 watch: "atlas"
+watch: "x"
+watch: "y"
+watch: "width"
+watch: "height"
 
 /// breakpoints ///////////////////////////////////////////////////////////////
 
 breakpoint:
 {
-  location: ("code/game/game.odin":57)
+  location: ("code/game/game.odin":59)
+}
+
+breakpoint:
+{
+  location: ("code/render/gl/render_gl_textures.odin":104)
+}
+
+breakpoint:
+{
+  location: ("code/game/game.odin":54)
+}
+
+breakpoint:
+{
+  location: ("code/atlas/atlas.odin":134)
 }
 
 /// targets ///////////////////////////////////////////////////////////////////
 
 target:
 {
-  disabled: 1
+  name: "Game"
   executable: "bin/game.exe"
   working_directory: "bin"
 }
 
 target:
 {
+  name: "Aseprite Exporter"
   disabled: 1
   executable: "code/aseprite_exporter/aseprite_exporter.exe"
   working_directory: "code/aseprite_exporter"
@@ -38,11 +58,13 @@ recent_file: "../clones/odin/base/runtime/core.odin"
 recent_file: "D:/a/_work/1/s/src/vctools/crt/vcruntime/src/string/amd64/memset.asm"
 recent_file: "D:/a/_work/1/s/src/vctools/crt/vcruntime/src/string/amd64/memcpy.asm"
 recent_file: "code/win32/win32_main.odin"
-recent_file: "code/render/render.odin"
 recent_file: "code/render/gl/render_gl.odin"
-recent_file: "code/atlas/atlas.odin"
-recent_file: "code/game/game.odin"
 recent_file: "code/aseprite_exporter/aseprite_exporter.odin"
+recent_file: "code/render/render.odin"
+recent_file: "code/render/gl/render_gl_textures.odin"
+recent_file: "code/assets/textures/textures.odin"
+recent_file: "code/game/game.odin"
+recent_file: "code/atlas/atlas.odin"
 
 /// exception code filters ////////////////////////////////////////////////////
 

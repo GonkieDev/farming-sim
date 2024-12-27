@@ -46,6 +46,8 @@ init :: proc(client_dims: [2]i32) -> bool {
 		return false
 	}
 
+	log.info(.Game, "Test")
+
 	init_common_textures() or_return
 
 	state.game_rt = render.render_target_create({.DepthStencil}, client_dims) or_return

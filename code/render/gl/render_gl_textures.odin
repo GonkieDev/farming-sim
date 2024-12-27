@@ -52,7 +52,7 @@ texture_upload_from_data :: proc(
 			0,
 			0, // x,y offset
 			i32(width),
-			i32(width),
+			i32(height),
 			data_format,
 			data_type,
 			pixels,
