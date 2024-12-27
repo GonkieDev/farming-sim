@@ -37,6 +37,7 @@ GL_Id_Invalid :: 0xff_ff_ff_ff
 
 GL_Texture :: struct {
 	id: GL_Id,
+	handle: u64,
 }
 
 GL_Shader :: struct {
@@ -76,3 +77,14 @@ when ODIN_DEBUG {
 
 MAX_RENDER_SPRITES :: bc.MAX_RENDER_SPRITES
 Sprite_Draw_Data :: bc.Sprite_Draw_Data
+GL_Sprite_Draw_Data :: struct {
+	tint:   [4]f32,
+	dims:   [2]f32,
+	offset: [2]f32,
+	uv_offset: 		[2]f32,
+	uv_dims: 		[2]f32,
+	texture_index: u64, // vec2 in opengl
+	_paddihg: [2]u32,
+}
+
+MAX_RENDER_TEXTURES :: 256

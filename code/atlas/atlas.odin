@@ -14,6 +14,8 @@ Atlas_Result :: struct {
 	region_idx: int,
 	region_gen: int,
 	tex_idx:    int,
+	uv_offset: [2]f32,
+	uv_dims: [2]f32,
 }
 
 Region :: struct {
@@ -100,8 +102,17 @@ atlas_reserve :: proc(
 		}
 	}
 
-	x, y, w, h := atlas_xywh_from_result(atlas, result)
-	render.texture_update(texture.render_key, x, y, w, h, 8, 1 if is_mask else 4, pixels)
+	rs := texture.region_size
+	x := result.region_idx * (TEXTURE_SIZE % rs)
+	y := result.region_idx * (TEXTURE_SIZE / rs)
+
+	render.texture_update(texture.render_key, x, y, dims.x, dims.y, 8, 1 if is_mask else 4, pixels)
+
+	result.uv_offset.x = f32(x) / TEXTURE_SIZE
+	result.uv_offset.y = f32(y) / TEXTURE_SIZE
+	result.uv_dims.x = f32(rs) / TEXTURE_SIZE
+	result.uv_dims.y = f32(rs) / TEXTURE_SIZE
+
 
 	ok = true
 	return
@@ -172,14 +183,7 @@ atlas_assert_size_is_aligned :: proc(s: int) {
 	assert(math.is_power_of_two(s))
 }
 
-atlas_xywh_from_result :: proc(atlas: ^Atlas, result: Atlas_Result) -> (x, y, w, h: int) {
-	texture := atlas.textures[result.tex_idx]
-	rs := texture.region_size
-	w = rs
-	h = w
-
-	x = result.region_idx * (TEXTURE_SIZE % rs)
-	y = result.region_idx * (TEXTURE_SIZE / rs)
-
-	return
+atlas_texture_from_result :: proc(atlas: ^Atlas, result: Atlas_Result) -> render.Texture_Key {
+	texture := &atlas.textures[result.tex_idx]
+	return texture.render_key
 }

@@ -66,4 +66,7 @@ Sprite_Draw_Data :: struct {
 	tint:   [4]f32,
 	dims:   [2]f32,
 	offset: [2]f32,
+	uv_offset: 		[2]f32,
+	uv_dims: 		[2]f32,
+	texture_id: Texture_Key,
 }

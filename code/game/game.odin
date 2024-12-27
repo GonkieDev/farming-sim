@@ -46,15 +46,14 @@ init :: proc(client_dims: [2]i32) -> bool {
 		return false
 	}
 
-	log.info(.Game, "Test")
-
 	init_common_textures() or_return
 
 	state.game_rt = render.render_target_create({.DepthStencil}, client_dims) or_return
 	atlas.atlas_init(&state.sprites_atlas, smallest_size = 16, biggest_size = 128)
 
 	hair := textures.texture_load(
-		build_config.ASSETS_PATH + "test/hair_0_color_mask_0.bmp",
+		//build_config.ASSETS_PATH + "test/East_0_color_mask_0.bmp",
+		build_config.ASSETS_PATH + "test/test.png",
 	) or_return
 	state.hair = atlas.atlas_reserve(
 		&state.sprites_atlas,
@@ -130,11 +129,16 @@ render :: proc(client_dims: [2]i32) {
 		red := v4{1.0, 0.0, 0.0, 1.0}
 		green := v4{0.0, 1.0, 0.0, 1.0}
 		blue := v4{0.0, 0.0, 1.0, 1.0}
+		white := v4{1.0,1.0,1.0,1.0}
 
 		SDD :: render.Sprite_Draw_Data
 		append(&sprite_draw_data, SDD{tint = red, dims = {20, 50}, offset = {0, 50}})
 		append(&sprite_draw_data, SDD{tint = green, dims = {20, 50}})
 		append(&sprite_draw_data, SDD{tint = blue, dims = {30, 30}, offset = {80, 40}})
+
+		hair := state.hair
+		append(&sprite_draw_data, SDD{tint = white, dims = {100, 100}, offset = {200,200}, uv_offset = hair.uv_offset, uv_dims = hair.uv_dims, texture_id =
+			atlas.atlas_texture_from_result(&state.sprites_atlas, hair)})
 
 		render.render_end_pass(&{sprite_draw_data = sprite_draw_data[:]})
 	}

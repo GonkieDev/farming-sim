@@ -139,7 +139,7 @@ ase_export_from_buffer :: proc(
 
 				if .Output_To_File in options {
 					filename := fmt.tprintf(
-						"%s_%v_color.bmp",
+						"%s_%v_color.png",
 						layer_group.layer_chunk.name,
 						frame_idx,
 					)
@@ -162,7 +162,7 @@ stack_cel_chunks :: proc(
 ) -> (
 	pixels: []RGBA,
 ) {
-	assert(len(cel_chunks) > 0)
+	//assert(len(cel_chunks) > 0)
 	assert(w > 0)
 	assert(h > 0)
 
@@ -541,12 +541,20 @@ write_to_file :: proc(
 		non_mod_fp := filepath.join({path, filename})
 		log.infof("[Non-Mod] Writing to file: %s", non_mod_fp)
 		assert(len(raw_sprite.non_mod[:]) > 0)
-		stb_image.write_bmp(
-			s.clone_to_cstring(non_mod_fp),
+		//stb_image.write_bmp(
+		//	s.clone_to_cstring(non_mod_fp),
+		//	i32(raw_sprite.size.x),
+		//	i32(raw_sprite.size.y),
+		//	4,
+		//	raw_data(raw_sprite.non_mod[,:])
+		//)
+		stb_image.write_png(
+			s.clone_to_cstring(non_mod_fp, context.temp_allocator),
 			i32(raw_sprite.size.x),
 			i32(raw_sprite.size.y),
 			4,
 			raw_data(raw_sprite.non_mod[:]),
+			i32(raw_sprite.size.x * size_of(RGBA)),
 		)
 	}
 

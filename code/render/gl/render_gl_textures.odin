@@ -32,6 +32,10 @@ texture_upload_from_data :: proc(
 	}
 	gl.TextureStorage2D(gl_texture.id, 1, internal_format, i32(width), i32(height))
 
+	gl_texture.handle = gl.GetTextureHandleARB(gl_texture.id)
+	assert(gl_texture.handle != 0)
+	gl.MakeTextureHandleResidentARB(gl_texture.handle)
+
 	when ODIN_DEBUG {
 		if is_depth_stencil {
 			assert(pixels == nil)

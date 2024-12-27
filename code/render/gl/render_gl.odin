@@ -60,7 +60,7 @@ init :: proc() -> bool {
 	gl.CreateBuffers(1, &gl_state.sprite_ssbo)
 	gl.NamedBufferStorage(
 		gl_state.sprite_ssbo,
-		MAX_RENDER_SPRITES * size_of(Sprite_Draw_Data),
+		MAX_RENDER_SPRITES * size_of(GL_Sprite_Draw_Data),
 		nil,
 		gl.DYNAMIC_STORAGE_BIT,
 	)
@@ -163,22 +163,37 @@ render_end_pass :: proc(target: ^bc.Render_End_Pass) {
 	gl.BindBufferBase(gl.UNIFORM_BUFFER, Global_UBO_Binding_Point, gl_state.global_ubo)
 
 	// Draw sprites
-	{
-		sdd := target.sprite_draw_data
-		assert(len(sdd) < MAX_RENDER_SPRITES)
+		texture_array := make([dynamic]GL_Id, context.temp_allocator)
+		gl_sdd: []GL_Sprite_Draw_Data
+		{
+			sdd := target.sprite_draw_data
+			assert(len(sdd) < MAX_RENDER_SPRITES)
+			gl_sdd = make([]GL_Sprite_Draw_Data, len(sdd), context.temp_allocator)
+
+			for s, i in sdd {
+				texture := texture_from_key(s.texture_id)
+				gl_sdd[i] = GL_Sprite_Draw_Data {
+					tint = s.tint,
+					dims = s.dims,
+					offset = s.offset,
+					texture_index = texture.handle,
+					uv_offset = s.uv_offset,
+					uv_dims = s.uv_dims,
+			}
+		}
 
 		gl.NamedBufferSubData(
 			gl_state.sprite_ssbo,
 			int(0),
-			len(sdd) * size_of(Sprite_Draw_Data),
-			raw_data(sdd),
+			len(gl_sdd) * size_of(GL_Sprite_Draw_Data),
+			raw_data(gl_sdd),
 		)
 
 		shader := shader_from_key(gl_state.sprite_shader)
 		gl.UseProgram(shader.program)
 		gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, gl_state.sprite_ssbo)
 		gl.BindVertexArray(gl_state.default_vao)
-		gl.DrawArrays(gl.TRIANGLES, 0, 6 * i32(len(sdd)))
+		gl.DrawArrays(gl.TRIANGLES, 0, 6 * i32(len(gl_sdd)))
 	}
 
 	// Blit to default frame buffer
