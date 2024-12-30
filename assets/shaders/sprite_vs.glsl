@@ -16,7 +16,8 @@ struct Sprite_Draw_Data {
 	float uv_offset[2];
 	float uv_dims[2];
 	uvec2 tex_handle;
-	float _padding[2];
+	float z;
+	float _padding;
 };
 
 //https://ktstephano.github.io/rendering/opengl/prog_vtx_pulling
@@ -71,6 +72,11 @@ uvec2 get_tex_handle(int idx)
 	return sprite_draw_data[idx].tex_handle;
 }
 
+float get_z(int idx)
+{
+	return sprite_draw_data[idx].z;
+}
+
 out flat uvec2 v2f_tex_handle;
 out vec2 v2f_uv;
 out vec4 v2f_tint;
@@ -112,9 +118,10 @@ void main()
 	vec2 uv_dims = get_uv_dims(idx);
 	vec2 uv_offset = get_uv_offset(idx);
 	uvec2 tex_handle = get_tex_handle(idx);
+	float z = get_z(idx);
 
 	vec2 vert = verts[gl_VertexID % 6] * dims + offset;
-	vec4 pos = proj * view * vec4(vert, 0.0, 1.0);
+	vec4 pos = proj * view * vec4(vert, z, 1.0);
 	gl_Position = pos;
 
 	v2f_tex_handle = tex_handle;

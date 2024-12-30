@@ -84,7 +84,8 @@ GL_Sprite_Draw_Data :: struct {
 	uv_offset: 		[2]f32,
 	uv_dims: 		[2]f32,
 	texture_index: u64, // vec2 in opengl
-	_paddihg: [2]u32,
+	z: f32,
+	_padding: f32,
 }
 
 MAX_RENDER_TEXTURES :: 256

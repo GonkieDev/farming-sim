@@ -17,6 +17,7 @@ LogLocation :: enum {
 	Game,
 	GL,
 	Atlas,
+	Sprite,
 }
 
 create_logger :: proc() -> Logger {

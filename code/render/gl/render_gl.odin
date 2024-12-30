@@ -179,6 +179,7 @@ render_end_pass :: proc(target: ^bc.Render_End_Pass) {
 					texture_index = texture.handle,
 					uv_offset = s.uv_offset,
 					uv_dims = s.uv_dims,
+					z = s.z,
 			}
 		}
 

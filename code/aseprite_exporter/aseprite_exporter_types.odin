@@ -4,10 +4,11 @@ import ase "./aseprite"
 
 v2i :: [2]u32
 RGBA :: [4]u8 // NOTE: max color depth in aseprite is 32bpp
+Mod_Pixel :: RGBA
 Normal_Map_Pixel :: [3]f32
 
 Raw_Sprite :: struct {
-	mod:     [dynamic][]u8,
+	mod:     [dynamic][]Mod_Pixel,
 	non_mod: []RGBA,
 	normal:  []Normal_Map_Pixel,
 	//origin:  v2i, 
@@ -52,6 +53,7 @@ Option :: enum {
 	Log_Tags,
 	Abort_On_Broken_Folder,
 	Output_To_File,
+	Output_To_File_Log,
 }
 Options :: bit_set[Option]
 

@@ -11,4 +11,7 @@ void main()
 {
 	sampler2D tex = sampler2D(v2f_tex_handle);
 	FragColor = v2f_tint * texture(tex, v2f_uv);
+	if (FragColor.a == 0.0) {
+		discard;
+	}
 }

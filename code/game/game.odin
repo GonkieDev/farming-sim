@@ -2,9 +2,7 @@ package game
 
 import la "core:math/linalg"
 
-import textures "engine:assets/textures"
 import atlas "engine:atlas"
-import build_config "engine:build_config"
 import input "engine:input"
 import log "engine:log"
 import render "engine:render"
@@ -23,9 +21,6 @@ State :: struct {
 	// RTs
 	game_rt:                render.RenderTarget_Key,
 	sprites_atlas:          atlas.Atlas,
-
-	//
-	hair:                   atlas.Atlas_Result,
 
 	//
 	common_textures:        Common_Textures,
@@ -51,16 +46,7 @@ init :: proc(client_dims: [2]i32) -> bool {
 	state.game_rt = render.render_target_create({.DepthStencil}, client_dims) or_return
 	atlas.atlas_init(&state.sprites_atlas, smallest_size = 16, biggest_size = 128)
 
-	hair := textures.texture_load(
-		//build_config.ASSETS_PATH + "test/East_0_color_mask_0.bmp",
-		build_config.ASSETS_PATH + "test/test.png",
-	) or_return
-	state.hair = atlas.atlas_reserve(
-		&state.sprites_atlas,
-		{hair.width, hair.height},
-		false,
-		raw_data(hair.pixels.buf),
-	) or_return
+	load_sprites() or_return
 
 	return true
 }
@@ -109,7 +95,7 @@ render :: proc(client_dims: [2]i32) {
 	{
 		hw := f32(client_dims.x) / 2.0
 		hh := f32(client_dims.y) / 2.0
-		proj = la.matrix_ortho3d_f32(-hw, hw, -hh, hh, 0.0, 300.0)
+		proj = la.matrix_ortho3d_f32(-hw, hw, -hh, hh, -300.0, 300.0)
 	}
 	view := la.identity(m4)
 
@@ -132,13 +118,11 @@ render :: proc(client_dims: [2]i32) {
 		white := v4{1.0,1.0,1.0,1.0}
 
 		SDD :: render.Sprite_Draw_Data
-		append(&sprite_draw_data, SDD{tint = red, dims = {20, 50}, offset = {0, 50}})
-		append(&sprite_draw_data, SDD{tint = green, dims = {20, 50}})
-		append(&sprite_draw_data, SDD{tint = blue, dims = {30, 30}, offset = {80, 40}})
+		//append(&sprite_draw_data, SDD{tint = red, dims = {20, 50}, offset = {0, 50}})
+		//append(&sprite_draw_data, SDD{tint = green, dims = {20, 50}})
+		//append(&sprite_draw_data, SDD{tint = blue, dims = {30, 30}, offset = {80, 40}})
 
-		hair := state.hair
-		append(&sprite_draw_data, SDD{tint = white, dims = {100, 100}, offset = {200,200}, uv_offset = hair.uv_offset, uv_dims = hair.uv_dims, texture_id =
-			atlas.atlas_texture_from_result(&state.sprites_atlas, hair)})
+		draw_sprite(&sprite_draw_data, &sprites[.Player_Walk_East])
 
 		render.render_end_pass(&{sprite_draw_data = sprite_draw_data[:]})
 	}

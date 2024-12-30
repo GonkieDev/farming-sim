@@ -81,6 +81,8 @@ atlas_reserve :: proc(
 	result: Atlas_Result,
 	ok: bool,
 ) {
+	if dims.x == 0 || dims.y == 0 do return
+
 	size := max(dims.x, dims.y)
 	if size > atlas.biggest_size do return
 	if size < atlas.smallest_size do size = atlas.smallest_size
@@ -102,16 +104,19 @@ atlas_reserve :: proc(
 		}
 	}
 
-	rs := texture.region_size
-	x := result.region_idx * (TEXTURE_SIZE % rs)
-	y := result.region_idx * (TEXTURE_SIZE / rs)
+	x, y: int
+	{
+		rs := texture.region_size * result.region_idx
+		x = rs % TEXTURE_SIZE
+		y = rs / TEXTURE_SIZE
+	}
 
 	render.texture_update(texture.render_key, x, y, dims.x, dims.y, 8, 1 if is_mask else 4, pixels)
 
 	result.uv_offset.x = f32(x) / TEXTURE_SIZE
 	result.uv_offset.y = f32(y) / TEXTURE_SIZE
-	result.uv_dims.x = f32(rs) / TEXTURE_SIZE
-	result.uv_dims.y = f32(rs) / TEXTURE_SIZE
+	result.uv_dims.x = f32(dims.x) / TEXTURE_SIZE
+	result.uv_dims.y = f32(dims.y) / TEXTURE_SIZE
 
 
 	ok = true

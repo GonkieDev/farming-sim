@@ -13,6 +13,8 @@ import stb_image "vendor:stb/image"
 
 ASEPRITE_EXPOTER_DEBUG :: ODIN_DEBUG
 
+output_dir: string = "./aseprite_export"
+
 main :: proc() {
 	logger_opts := bit_set[runtime.Logger_Option]{.Level, .Time}
 	when ASEPRITE_EXPOTER_DEBUG {
@@ -20,15 +22,36 @@ main :: proc() {
 	}
 	context.logger = log.create_console_logger(opt = logger_opts)
 
-	log.info("Starting up...")
-	defer log.info("Finished.")
+	if len(os.args) <= 1 {
+		log.error("No input file provided.")
+		log.info("Usage:")
+		log.info("\taseprite_exporter.exe in_file.aseprite /path/to/output_dir")
+		return
+	}
 
-	options := Options{.Log_Tags, .Log_Layers, .Output_To_File}
-	//ase_export_from_file("../assets/playre.aseprite", options)
-	//ase_export_from_file("../assets/guy.aseprite", options)
-	//ase_export_from_file("../assets/tests.aseprite", options)
-	ase_export_from_file("../../assets/Player.aseprite", options)
+	if len(os.args) <= 2 {
+		log.info("No output path provided, assuming default.")
+	} else {
+		output_dir = os.args[2]
+	}
 
+	filename := os.args[1]
+	log.infof("Exporting %s to dir %s", filename, output_dir)
+
+	//options := Options{.Log_Tags, .Log_Layers, .Output_To_File}
+	options := Options{.Output_To_File}
+	log.infof("Options: %v", options)
+
+	if .Output_To_File in options {
+		os.make_directory(output_dir)
+	}
+
+	_, _, err := ase_export_from_file(filename, options)
+	if err == nil {
+		log.info("Finished successfully.")
+	} else {
+		log.infof("Failure: %v", err)
+	}
 }
 
 ase_export_from_file :: proc(
@@ -112,7 +135,7 @@ ase_export_from_buffer :: proc(
 
 				raw_sprite := Raw_Sprite {
 					size = {u32(width), u32(height)},
-					mod  = make([dynamic][]u8, allocator),
+					mod  = make([dynamic][]Mod_Pixel, allocator),
 				}
 
 				cels: [Ase_Layer_Type][dynamic]^ase.Cel_Chunk
@@ -138,13 +161,12 @@ ase_export_from_buffer :: proc(
 				//process_normal(&raw_sprite, &layer_group, cels[.Normal][:])
 
 				if .Output_To_File in options {
-					filename := fmt.tprintf(
-						"%s_%v_color.png",
+					name := fmt.tprintf(
+						"%s_%v",
 						layer_group.layer_chunk.name,
 						frame_idx,
 					)
-					dir := filepath.join({"./test_output", tag.name, layer_group.layer_chunk.name})
-					write_to_file(tag.name, layer_group.layer_chunk.name, filename, &raw_sprite)
+					write_to_file(output_dir, name, &raw_sprite, options)
 				}
 
 			}
@@ -162,7 +184,7 @@ stack_cel_chunks :: proc(
 ) -> (
 	pixels: []RGBA,
 ) {
-	//assert(len(cel_chunks) > 0)
+	if len(cel_chunks) == 0 do return
 	assert(w > 0)
 	assert(h > 0)
 
@@ -221,6 +243,8 @@ process_non_mod :: proc(
 		palette,
 		allocator,
 	)
+
+
 }
 
 process_mod :: proc(
@@ -237,7 +261,7 @@ process_mod :: proc(
 		allocator,
 	)
 
-	raw_sprite.mod = make([dynamic][]u8, allocator)
+	raw_sprite.mod = make([dynamic][]Mod_Pixel, allocator)
 	colors := make([dynamic]RGBA, context.temp_allocator)
 	for pixel, pixel_idx in stacked_pixels {
 		if pixel.a == 0.0 do continue
@@ -247,10 +271,11 @@ process_mod :: proc(
 			append(&colors, pixel)
 			append(
 				&raw_sprite.mod,
-				make([]u8, int(raw_sprite.size.x) * int(raw_sprite.size.y), allocator),
+				make([]Mod_Pixel, int(raw_sprite.size.x) * int(raw_sprite.size.y), allocator),
 			)
 		}
-		raw_sprite.mod[color_idx][pixel_idx] = 255
+		//raw_sprite.mod[color_idx][pixel_idx] = 255
+		raw_sprite.mod[color_idx][pixel_idx] = {255,255,255,255}
 	}
 }
 
@@ -339,27 +364,6 @@ layer_groups_from_document :: proc(
 		case:
 			assert(false)
 		}
-	}
-
-	for &group in export_groups {
-		frames_count := 0
-		for layer_type in Ase_Layer_Type {
-			fc := len(group.layers[layer_type])
-			if fc != 0 {
-				if fc != frames_count && frames_count != 0 {
-					log.warnf(
-						"Folder %s is broken. There are non equal amounts of frames for mod/nonmod/normal.",
-						group.layer_chunk.name,
-					)
-					group.is_broken = true
-					if .Abort_On_Broken_Folder in options do err = .Broken_Folder
-					break
-				}
-				frames_count = fc
-			}
-		}
-
-		group.is_empty = frames_count == 0
 	}
 
 	if len(export_groups) == 0 {
@@ -515,10 +519,10 @@ rgbaf32_to_rgba :: proc(c: [4]f32) -> RGBA {
 
 // TODO: make a function for animations so that it we can delete the directory before writing
 write_to_file :: proc(
-	dir: string,
-	subdir: string,
-	filename: string,
+	output_dir: string,
+	base_name: string, // without extension
 	raw_sprite: ^Raw_Sprite,
+	options: Options,
 ) -> (
 	success: bool,
 ) {
@@ -528,28 +532,16 @@ write_to_file :: proc(
 
 	context.allocator = context.temp_allocator
 
-	path: string
-
-	path = filepath.join({".", dir})
-	os.make_directory(dir)
-
-	path = filepath.join({path, subdir})
-	os.make_directory(path)
-
-
 	if raw_sprite.non_mod != nil {
-		non_mod_fp := filepath.join({path, filename})
-		log.infof("[Non-Mod] Writing to file: %s", non_mod_fp)
-		assert(len(raw_sprite.non_mod[:]) > 0)
-		//stb_image.write_bmp(
-		//	s.clone_to_cstring(non_mod_fp),
-		//	i32(raw_sprite.size.x),
-		//	i32(raw_sprite.size.y),
-		//	4,
-		//	raw_data(raw_sprite.non_mod[,:])
-		//)
+		filename := s.concatenate({base_name, "_non_mod.png"})
+		non_mod_fp := filepath.join({output_dir, filename})
+
+		if .Output_To_File_Log in options {
+			log.infof("[Non-Mod] Writing to file: %s", non_mod_fp)
+		}
+
 		stb_image.write_png(
-			s.clone_to_cstring(non_mod_fp, context.temp_allocator),
+			s.clone_to_cstring(non_mod_fp),
 			i32(raw_sprite.size.x),
 			i32(raw_sprite.size.y),
 			4,
@@ -560,17 +552,21 @@ write_to_file :: proc(
 
 	if raw_sprite.mod != nil {
 
-		filename_no_ext := s.trim_suffix(filename, ".bmp")
 		for mask, mask_idx in raw_sprite.mod {
-			mask_name := fmt.tprintf("%s_mask_%v.bmp", filename_no_ext, mask_idx)
-			mask_path := filepath.join({path, mask_name})
-			log.infof("Writing modifiable to file: %s", mask_path)
-			stb_image.write_bmp(
-				s.clone_to_cstring(mask_path),
+			filename := fmt.tprintf("%s_mod_%v.png", base_name, mask_idx)
+			mod_fp := filepath.join({output_dir, filename})
+
+			if .Output_To_File_Log in options {
+				log.infof("[Mod] Writing modifiable to file: %s", mod_fp)
+			}
+
+			stb_image.write_png(
+				s.clone_to_cstring(mod_fp),
 				i32(raw_sprite.size.x),
 				i32(raw_sprite.size.y),
-				1,
+				size_of(Mod_Pixel) / size_of(u8),
 				raw_data(mask[:]),
+				i32(raw_sprite.size.x * size_of(Mod_Pixel)),
 			)
 		}
 	}

@@ -8,12 +8,43 @@ watch: "y"
 watch: "width"
 watch: "height"
 watch: "gl_sdd.data[0]"
+watch: "load_info"
+watch: "img"
+watch: "result.uv_dims"
+watch: "frame.mods.data[0]"
+watch: "sprites"
+watch: "sprite"
+watch: "frame"
+watch: "x"
+watch: "y"
+watch: "result.region_idx"
 
 /// breakpoints ///////////////////////////////////////////////////////////////
 
 breakpoint:
 {
-  location: ("code/game/game.odin":57)
+  location: ("code/aseprite_exporter/aseprite_exporter.odin":54)
+}
+
+breakpoint:
+{
+  name: "load_sprites"
+  location: ("code/game/game.odin":49)
+}
+
+breakpoint:
+{
+  location: ("code/game/game.odin":125)
+}
+
+breakpoint:
+{
+  location: ("code/game/draw.odin":34)
+}
+
+breakpoint:
+{
+  location: ("code/atlas/atlas.odin":108)
 }
 
 /// targets ///////////////////////////////////////////////////////////////////
@@ -30,7 +61,8 @@ target:
   name: "Aseprite Exporter"
   disabled: 1
   executable: "code/aseprite_exporter/aseprite_exporter.exe"
-  working_directory: "code/aseprite_exporter"
+  working_directory: "../farming-sim"
+  arguments: ".\\assets\\Player.aseprite .\\assets\\player"
 }
 
 /// recent_files //////////////////////////////////////////////////////////////
@@ -41,15 +73,20 @@ recent_file: "../clones/odin/base/runtime/error_checks.odin"
 recent_file: "code/main.odin"
 recent_file: "code/render/gl/render_gl_shader.odin"
 recent_file: "../clones/odin/base/runtime/core.odin"
-recent_file: "D:/a/_work/1/s/src/vctools/crt/vcruntime/src/string/amd64/memset.asm"
 recent_file: "D:/a/_work/1/s/src/vctools/crt/vcruntime/src/string/amd64/memcpy.asm"
-recent_file: "code/win32/win32_main.odin"
-recent_file: "code/aseprite_exporter/aseprite_exporter.odin"
 recent_file: "code/render/gl/render_gl_textures.odin"
-recent_file: "code/assets/textures/textures.odin"
-recent_file: "code/atlas/atlas.odin"
 recent_file: "code/render/gl/render_gl.odin"
 recent_file: "code/render/render.odin"
+recent_file: "../../program files/odin/base/runtime/entry_windows.odin"
+recent_file: "../../program files/odin/base/runtime/core.odin"
+recent_file: "code/win32/win32_main.odin"
+recent_file: "D:/a/_work/1/s/src/vctools/crt/vcruntime/src/string/amd64/memset.asm"
+recent_file: "../../Program Files/odin/base/runtime/error_checks.odin"
+recent_file: "code/assets/textures/textures.odin"
+recent_file: "code/aseprite_exporter/aseprite_exporter.odin"
+recent_file: "code/game/draw.odin"
+recent_file: "code/game/sprite.odin"
+recent_file: "code/atlas/atlas.odin"
 recent_file: "code/game/game.odin"
 
 /// exception code filters ////////////////////////////////////////////////////
