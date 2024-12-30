@@ -182,38 +182,13 @@ win32_window_callback :: proc "system" (
 
 	case win32.WM_SETFOCUS:
 		//lock_and_hide_cursor()
-		log.info(.Win32, "WM Set focus")
 		win32_state.window_is_focused = true
 		result = win32.DefWindowProcW(hwnd, msg, wparam, lparam)
 
-		{
-			@(static) test := 0
-			test += 1
-			fmt.printf(
-				"\nSet Focus:\nTest:\t%v\nFocused:\t%v\nMnimized:\t%v\n",
-				test,
-				win32_state.window_is_focused,
-				win32_state.window_is_minimized,
-			)
-		}
-
 	case win32.WM_KILLFOCUS:
-		log.info(.Win32, "WM Kill focus")
-
 		unlock_and_show_cursor()
 		win32_state.window_is_focused = false
 		result = win32.DefWindowProcW(hwnd, msg, wparam, lparam)
-
-		{
-			@(static) test := 0
-			test += 1
-			fmt.printf(
-				"\nSet Focus:\nTest:\t%v\nFocused:\t%v\nMnimized:\t%v\n",
-				test,
-				win32_state.window_is_focused,
-				win32_state.window_is_minimized,
-			)
-		}
 
 	// Raw Input
 	// https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-input
@@ -324,7 +299,7 @@ gl_init_dummy_context :: proc() -> bool {
 		log.error(.GL, "Failed to register window class")
 		return false
 	}
-	
+
 	//odinfmt:disable
 	hwnd := win32.CreateWindowExW(
 		win32.WS_EX_OVERLAPPEDWINDOW, class_name, win32.L("DummyGLWindow"), win32.WS_OVERLAPPEDWINDOW,
@@ -423,7 +398,7 @@ gl_init_window :: proc() -> bool {
 		log.error(.GL, "Failed to set pixel format")
 		return false
 	}
-	
+
 	//odinfmt:disable
 	gl_attribs := [?]i32{
 		win32.WGL_CONTEXT_MAJOR_VERSION_ARB, build_config.GL_VERSION[0],
