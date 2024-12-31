@@ -71,7 +71,7 @@ init :: proc() -> bool {
 shutdown :: proc() {
 	if gl_state != nil {
 		when ODIN_DEBUG {
-			shader_destroy(gl_state.debug.lines_shader)
+			//shader_destroy(gl_state.debug.lines_shader)
 		}
 		shader_destroy(gl_state.sprite_shader)
 		shader_destroy(gl_state.screen_quad_shader)
@@ -163,23 +163,23 @@ render_end_pass :: proc(target: ^bc.Render_End_Pass) {
 	gl.BindBufferBase(gl.UNIFORM_BUFFER, Global_UBO_Binding_Point, gl_state.global_ubo)
 
 	// Draw sprites
-		texture_array := make([dynamic]GL_Id, context.temp_allocator)
-		gl_sdd: []GL_Sprite_Draw_Data
-		{
-			sdd := target.sprite_draw_data
-			assert(len(sdd) < MAX_RENDER_SPRITES)
-			gl_sdd = make([]GL_Sprite_Draw_Data, len(sdd), context.temp_allocator)
+	texture_array := make([dynamic]GL_Id, context.temp_allocator)
+	gl_sdd: []GL_Sprite_Draw_Data
+	{
+		sdd := target.sprite_draw_data
+		assert(len(sdd) < MAX_RENDER_SPRITES)
+		gl_sdd = make([]GL_Sprite_Draw_Data, len(sdd), context.temp_allocator)
 
-			for s, i in sdd {
-				texture := texture_from_key(s.texture_id)
-				gl_sdd[i] = GL_Sprite_Draw_Data {
-					tint = s.tint,
-					dims = s.dims,
-					offset = s.offset,
-					texture_index = texture.handle,
-					uv_offset = s.uv_offset,
-					uv_dims = s.uv_dims,
-					z = s.z,
+		for s, i in sdd {
+			texture := texture_from_key(s.texture_id)
+			gl_sdd[i] = GL_Sprite_Draw_Data {
+				tint          = s.tint,
+				dims          = s.dims,
+				offset        = s.offset,
+				texture_index = texture.handle,
+				uv_offset     = s.uv_offset,
+				uv_dims       = s.uv_dims,
+				z             = s.z,
 			}
 		}
 
@@ -224,6 +224,7 @@ render_end_pass :: proc(target: ^bc.Render_End_Pass) {
 
 debug_render_line :: proc(debug_render_line: bc.Debug_Render_Line) {
 	when ODIN_DEBUG {
+		assert(false) // this is not yet implemented
 		#assert(LINES_SSBO_COUNT % 2 == 0)
 		assert(gl_state.debug.lines_ssbo_vertex_count < LINES_SSBO_COUNT)
 

@@ -5,6 +5,9 @@ import "core:strings"
 
 import "engine:build_config"
 
+_ :: os
+_ :: strings
+
 when build_config.HOT_RELOAD {
 	Hot_Reload :: struct {
 		filepath: string,

@@ -4,8 +4,8 @@ import "base:runtime"
 import "core:os"
 import gl "vendor:OpenGL"
 
-import hot_reload "engine:assets/hot_reload"
 import build_config "engine:build_config"
+import hot_reload "engine:hot_reload"
 import log "engine:log"
 import bc "engine:render/backend_common"
 

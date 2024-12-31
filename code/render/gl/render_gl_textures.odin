@@ -3,7 +3,6 @@ package render_gl
 import gl "vendor:OpenGL"
 
 import bc "../backend_common"
-import textures "engine:assets/textures"
 
 Texture_Key :: bc.Texture_Key
 
@@ -74,23 +73,6 @@ texture_upload_from_data :: proc(
 
 	success = true
 	return
-}
-
-texture_upload :: proc(
-	texture: textures.Texture,
-	generate_mips: bool,
-) -> (
-	texture_key: Texture_Key,
-	success: bool,
-) {
-	return texture_upload_from_data(
-		i32(texture.width),
-		i32(texture.height),
-		i32(texture.depth),
-		i32(texture.channels),
-		generate_mips,
-		raw_data(texture.pixels.buf),
-	)
 }
 
 texture_update :: proc(

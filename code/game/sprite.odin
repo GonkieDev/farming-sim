@@ -1,46 +1,13 @@
 package game
 
 import "base:runtime"
-import "core:strings"
-import "core:time"
 
-import textures "engine:assets/textures"
-import atlas_manager "engine:atlas"
 import build_config "engine:build_config"
+import image_loader "engine:image_loader"
 import log "engine:log"
 
-image_asset_from_filepath :: proc(
-	filepath: string,
-	allocator := context.allocator,
-) -> Image_Asset {
-	return Image_Asset{fp = strings.clone(filepath, allocator)}
-}
-
-image_asset :: proc {
-	image_asset_from_filepath,
-}
-
-Asset :: struct {
-	fp: string,
-}
-
-// NOTE: when `Asset` is in the name, that's the structs that are stored in files
-
-Image_Asset :: distinct Asset
-
-Sprite_Frame_Asset :: struct {
-	base:     Image_Asset,
-	mods:     []Image_Asset,
-	duration: time.Duration,
-}
-
-Sprite_Asset :: struct {
-	frames:     []Sprite_Frame_Asset,
-	mod_colors: [][]Color,
-}
-
 Sprite_Frame_Layer :: struct {
-	atlas_result: atlas_manager.Atlas_Result,
+	atlas_result: Atlas_Result,
 }
 
 Sprite_Frame :: struct {
@@ -50,7 +17,7 @@ Sprite_Frame :: struct {
 
 Sprite :: struct {
 	frames:       []Sprite_Frame,
-	sprite_asset: ^Sprite_Asset,
+	sprite_asset: ^Asset_Sprite,
 }
 
 Sprite_IDs :: enum {
@@ -70,7 +37,7 @@ load_sprites :: proc() -> (ok: bool) {
 }
 
 @(require_results)
-load_sprite :: proc(sprite_asset: ^Sprite_Asset) -> (sprite: Sprite, ok: bool) {
+load_sprite :: proc(sprite_asset: ^Asset_Sprite) -> (sprite: Sprite, ok: bool) {
 	if len(sprite_asset.frames) == 0 {
 		log.error(.Sprite, "Failed to load sprite: 0 frames")
 		return
@@ -92,7 +59,7 @@ load_sprite :: proc(sprite_asset: ^Sprite_Asset) -> (sprite: Sprite, ok: bool) {
 	return
 }
 
-load_frame :: proc(sprite_frame_asset: Sprite_Frame_Asset) -> (frame: Sprite_Frame, ok: bool) {
+load_frame :: proc(sprite_frame_asset: Asset_Sprite_Frame) -> (frame: Sprite_Frame, ok: bool) {
 	if sprite_frame_asset.base == {} && len(sprite_frame_asset.mods) == 0 {
 		log.error(.Sprite, "Failed to load sprite's frame: no base or modifiable layers.")
 		return
@@ -118,7 +85,7 @@ load_frame :: proc(sprite_frame_asset: Sprite_Frame_Asset) -> (frame: Sprite_Fra
 }
 
 load_sprite_frame_layer :: proc(
-	image_asset: Image_Asset,
+	image_asset: Asset_Image,
 	is_mod: bool,
 ) -> (
 	sprite_frame_layer: Sprite_Frame_Layer,
@@ -132,13 +99,13 @@ load_sprite_frame_layer :: proc(
 
 	atlas := &state.sprites_atlas
 
-	tex := textures.texture_load(image_asset.fp) or_return
-	sprite_frame_layer.atlas_result = atlas_manager.atlas_reserve(
+	img := image_loader.load_from_file(image_asset.fp) or_return
+	sprite_frame_layer.atlas_result = atlas_reserve(
 		atlas,
-		{tex.width, tex.height},
+		{img.width, img.height},
 		//is_mod,
 		false,
-		raw_data(tex.pixels.buf),
+		raw_data(img.pixels.buf),
 	) or_return
 
 	ok = true

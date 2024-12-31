@@ -1,12 +1,11 @@
 package game
 
-import atlas_manager "engine:atlas"
 import render "engine:render"
 
 draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite: ^Sprite) {
 	SDD :: render.Sprite_Draw_Data
 
-	frame_idx := 0
+	frame_idx := 1
 
 	sdd_from_sprite_frame_layer :: proc(
 		layer: ^Sprite_Frame_Layer,
@@ -15,7 +14,7 @@ draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite:
 		z: f32,
 	) -> render.Sprite_Draw_Data {
 		ar := &layer.atlas_result
-		tex_id := atlas_manager.atlas_texture_from_result(&state.sprites_atlas, ar^)
+		tex_id := atlas_texture_from_result(&state.sprites_atlas, ar^)
 		assert(ar.uv_dims != {})
 		return SDD {
 			tint = tint,
@@ -46,7 +45,7 @@ draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite:
 	}
 	// Draw mods
 	for &mod, mod_idx in frame.mods {
-		tint := sprite.sprite_asset.mod_colors[frame_idx][mod_idx]
+		tint := sprite.sprite_asset.mod_colors[1][mod_idx]
 		sdd := sdd_from_sprite_frame_layer(&mod, dims, tint, f32(mod_idx))
 		append(sprite_draw_data, sdd)
 	}

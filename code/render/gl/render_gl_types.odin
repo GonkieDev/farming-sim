@@ -1,6 +1,6 @@
 package render_gl
 
-import "engine:assets/hot_reload"
+import "engine:hot_reload"
 import bc "engine:render/backend_common"
 import gl "vendor:OpenGL"
 
@@ -36,7 +36,7 @@ GL_Id :: u32
 GL_Id_Invalid :: 0xff_ff_ff_ff
 
 GL_Texture :: struct {
-	id: GL_Id,
+	id:     GL_Id,
 	handle: u64,
 }
 
@@ -78,14 +78,14 @@ when ODIN_DEBUG {
 MAX_RENDER_SPRITES :: bc.MAX_RENDER_SPRITES
 Sprite_Draw_Data :: bc.Sprite_Draw_Data
 GL_Sprite_Draw_Data :: struct {
-	tint:   [4]f32,
-	dims:   [2]f32,
-	offset: [2]f32,
-	uv_offset: 		[2]f32,
-	uv_dims: 		[2]f32,
+	tint:          [4]f32,
+	dims:          [2]f32,
+	offset:        [2]f32,
+	uv_offset:     [2]f32,
+	uv_dims:       [2]f32,
 	texture_index: u64, // vec2 in opengl
-	z: f32,
-	_padding: f32,
+	z:             f32,
+	_padding:      f32,
 }
 
 MAX_RENDER_TEXTURES :: 256

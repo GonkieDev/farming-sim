@@ -1,7 +1,9 @@
 package render_gl
 
+import "base:runtime" // for debug_trap
+
+import log "engine:log"
 import gl "vendor:OpenGL"
-import log "../../log"
 
 // https://www.khronos.org/opengl/wiki/Debug_Output
 gl_debug_callback :: proc "c" (
@@ -53,4 +55,7 @@ gl_debug_callback :: proc "c" (
 	}
 
 	logf(.GL, "[%s] [%s] (ID: %v)\n%s", source_str, type_str, id, message)
+	if severity == gl.DEBUG_SEVERITY_HIGH {
+		runtime.debug_trap()
+	}
 }

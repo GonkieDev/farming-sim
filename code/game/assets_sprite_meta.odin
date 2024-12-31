@@ -7,7 +7,6 @@ import s "core:strings"
 import "core:time"
 
 import log "engine:log"
-//import build_config "engine:build_config"
 
 SPRITE_META_DEFAULT_FRAME_DURATION :: 100 // same as aseprite
 
@@ -25,7 +24,7 @@ sprite_meta_load :: proc(
 	filepath: string,
 	allocator := context.allocator,
 ) -> (
-	sprite_assets: []Sprite_Asset,
+	sprite_assets: []Asset_Sprite,
 	ok: bool,
 ) {
 	file_str: string
@@ -67,7 +66,7 @@ sprite_meta_load_version_0 :: proc(
 	filepath: string, // for error messages
 	allocator := context.allocator,
 ) -> (
-	out_sprite_assets: []Sprite_Asset,
+	out_sprite_assets: []Asset_Sprite,
 	ok: bool,
 ) {
 
@@ -104,12 +103,12 @@ sprite_meta_load_version_0 :: proc(
 	// because the caller will not be able to free the data in case of failure
 	// since sprite_assets only gets converted into the returning slice `out_sprite_assets`
 	// at the end
-	sprite_assets := make([dynamic]Sprite_Asset)
+	sprite_assets := make([dynamic]Asset_Sprite)
 
 	current_section := Section_Kind.Invalid
-	current_sprite: ^Sprite_Asset
-	current_sprite_frames: [dynamic]Sprite_Frame_Asset
-	current_frame_mods: [dynamic]Image_Asset
+	current_sprite: ^Asset_Sprite
+	current_sprite_frames: [dynamic]Asset_Sprite_Frame
+	current_frame_mods: [dynamic]Asset_Image
 	current_sprite_mod_colors: [dynamic][]Color
 	current_colors: [dynamic]Color
 
@@ -120,9 +119,9 @@ sprite_meta_load_version_0 :: proc(
 		line_kind := get_line_kind(line)
 		switch line_kind {
 		case .New_Sprite:
-			append(&sprite_assets, Sprite_Asset{})
+			append(&sprite_assets, Asset_Sprite{})
 			current_sprite = &sprite_assets[len(sprite_assets) - 1]
-			current_sprite_frames = make([dynamic]Sprite_Frame_Asset)
+			current_sprite_frames = make([dynamic]Asset_Sprite_Frame)
 			current_sprite_mod_colors = make([dynamic][]Color)
 
 		case .New_Section:
@@ -131,8 +130,8 @@ sprite_meta_load_version_0 :: proc(
 			switch section_kind {
 
 			case .Frame:
-				append(&current_sprite_frames, Sprite_Frame_Asset{})
-				current_frame_mods = make([dynamic]Image_Asset)
+				append(&current_sprite_frames, Asset_Sprite_Frame{})
+				current_frame_mods = make([dynamic]Asset_Image)
 
 			case .Colors:
 				append(&current_sprite_mod_colors, []Color{})
@@ -160,17 +159,17 @@ sprite_meta_load_version_0 :: proc(
 
 			switch current_section {
 			case .Frame:
-				frame: ^Sprite_Frame_Asset = &current_sprite_frames[len(current_sprite_frames) - 1]
+				frame: ^Asset_Sprite_Frame = &current_sprite_frames[len(current_sprite_frames) - 1]
 				attrib := line_get_after_colon_space(line)
 				if s.contains(line, "base") {
 					fp := path_fp.join({load_directory, attrib}, context.temp_allocator)
-					frame.base = image_asset(fp)
+					frame.base = asset_image(fp)
 				} else if s.contains(line, "normal") {
 				} else if s.contains(line, "mod") {
 					fp := path_fp.join({load_directory, attrib}, context.temp_allocator)
-					append(&current_frame_mods, Image_Asset{})
-					mod: ^Image_Asset = &current_frame_mods[len(current_frame_mods) - 1]
-					mod^ = image_asset(fp)
+					append(&current_frame_mods, Asset_Image{})
+					mod: ^Asset_Image = &current_frame_mods[len(current_frame_mods) - 1]
+					mod^ = asset_image(fp)
 				} else if s.contains(line, "duration") {
 					if duration_ms, parse_ok := conv.parse_int(attrib); parse_ok {
 						duration := time.Duration(duration_ms) * time.Millisecond
@@ -211,7 +210,7 @@ sprite_meta_load_version_0 :: proc(
 				current_sprite.frames = current_sprite_frames[:]
 
 				if len(current_frame_mods) > 0 {
-					frame: ^Sprite_Frame_Asset = &current_sprite_frames[len(current_sprite_frames) - 1]
+					frame: ^Asset_Sprite_Frame = &current_sprite_frames[len(current_sprite_frames) - 1]
 					frame.mods = current_frame_mods[:]
 				}
 			}

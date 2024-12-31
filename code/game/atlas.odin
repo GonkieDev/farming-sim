@@ -1,4 +1,4 @@
-package atlas
+package game
 
 import "base:runtime"
 import "core:math"
@@ -14,17 +14,17 @@ Atlas_Result :: struct {
 	region_idx: int,
 	region_gen: int,
 	tex_idx:    int,
-	uv_offset: [2]f32,
-	uv_dims: [2]f32,
+	uv_offset:  [2]f32,
+	uv_dims:    [2]f32,
 }
 
-Region :: struct {
+Atlas_Region :: struct {
 	occupied: bool,
 	gen:      int,
 }
 
 Atlas_Texture :: struct {
-	regions:     []Region,
+	regions:     []Atlas_Region,
 	region_size: int,
 	gen:         int,
 	render_key:  render.Texture_Key,
@@ -140,7 +140,7 @@ atlas_allocate_new_texture :: proc(atlas: ^Atlas, size: int, is_mask: bool) -> i
 	regions_count *= regions_count
 	texture := Atlas_Texture {
 		region_size = size,
-		regions     = make([]Region, regions_count, atlas.allocator),
+		regions     = make([]Atlas_Region, regions_count, atlas.allocator),
 	}
 
 	upload_ok: bool

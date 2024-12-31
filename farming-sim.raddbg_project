@@ -8,7 +8,7 @@ watch: "sprite_asset"
 
 breakpoint:
 {
-  location: ("code/game/sprite_meta_loader.odin":134)
+  location: ("code/render/gl/render_gl_shader.odin":25)
 }
 
 /// targets ///////////////////////////////////////////////////////////////////
@@ -34,6 +34,11 @@ recent_file: "../../Program Files/odin/base/runtime/error_checks.odin"
 recent_file: "code/game/sprite.odin"
 recent_file: "../../Program Files/odin/base/runtime/internal.odin"
 recent_file: "code/game/sprite_meta_loader.odin"
+recent_file: "../../Program Files/odin/vendor/opengl/wrappers.odin"
+recent_file: "code/render/gl/render_gl_debug_callback.odin"
+recent_file: "code/render/render.odin"
+recent_file: "code/render/gl/render_gl.odin"
+recent_file: "code/render/gl/render_gl_shader.odin"
 
 /// exception code filters ////////////////////////////////////////////////////
 

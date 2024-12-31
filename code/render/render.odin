@@ -2,7 +2,6 @@ package render
 
 import bc "./backend_common"
 import backend "./gl"
-import textures "engine:assets/textures"
 
 Texture_Key :: bc.Texture_Key
 Shader_Key :: bc.Shader_Key
@@ -40,15 +39,6 @@ render_end_pass :: proc(target: ^bc.Render_End_Pass) {
 	backend.render_end_pass(target)
 }
 
-texture_upload :: proc(
-	texture: textures.Texture,
-	generate_mips: bool,
-) -> (
-	texture_key: Texture_Key,
-	success: bool,
-) {
-	return backend.texture_upload(texture, generate_mips)
-}
 texture_upload_from_data :: proc(
 	width, height, depth, channels: i32,
 	generate_mips: bool,

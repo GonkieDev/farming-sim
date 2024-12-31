@@ -2,7 +2,6 @@ package game
 
 import la "core:math/linalg"
 
-import atlas "engine:atlas"
 import input "engine:input"
 import log "engine:log"
 import render "engine:render"
@@ -20,7 +19,7 @@ Update_Out :: struct {
 State :: struct {
 	// RTs
 	game_rt:                render.RenderTarget_Key,
-	sprites_atlas:          atlas.Atlas,
+	sprites_atlas:          Atlas,
 
 	//
 	common_textures:        Common_Textures,
@@ -44,7 +43,7 @@ init :: proc(client_dims: [2]i32) -> bool {
 	init_common_textures() or_return
 
 	state.game_rt = render.render_target_create({.DepthStencil}, client_dims) or_return
-	atlas.atlas_init(&state.sprites_atlas, smallest_size = 16, biggest_size = 128)
+	atlas_init(&state.sprites_atlas, smallest_size = 16, biggest_size = 128)
 
 	load_sprites() or_return
 
@@ -53,7 +52,7 @@ init :: proc(client_dims: [2]i32) -> bool {
 
 shutdown :: proc() {
 	if state != nil {
-		atlas.atlas_delete(&state.sprites_atlas)
+		atlas_delete(&state.sprites_atlas)
 		free(state)
 	}
 }
@@ -115,7 +114,7 @@ render :: proc(client_dims: [2]i32) {
 		red := v4{1.0, 0.0, 0.0, 1.0}
 		green := v4{0.0, 1.0, 0.0, 1.0}
 		blue := v4{0.0, 0.0, 1.0, 1.0}
-		white := v4{1.0,1.0,1.0,1.0}
+		white := v4{1.0, 1.0, 1.0, 1.0}
 
 		SDD :: render.Sprite_Draw_Data
 		//append(&sprite_draw_data, SDD{tint = red, dims = {20, 50}, offset = {0, 50}})
