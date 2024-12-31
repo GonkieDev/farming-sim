@@ -1,15 +1,20 @@
 package game
 
-import render "engine:render"
 import atlas_manager "engine:atlas"
+import render "engine:render"
 
 draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite: ^Sprite) {
 	SDD :: render.Sprite_Draw_Data
 
-	frame := &sprite.frames[0]
+	frame_idx := 0
 
-	sdd_from_sprite_asset :: proc(sa: ^Sprite_Asset, dims: [2]f32, tint: Color, z: f32) -> render.Sprite_Draw_Data {
-		ar := &sa.atlas_result
+	sdd_from_sprite_frame_layer :: proc(
+		layer: ^Sprite_Frame_Layer,
+		dims: [2]f32,
+		tint: Color,
+		z: f32,
+	) -> render.Sprite_Draw_Data {
+		ar := &layer.atlas_result
 		tex_id := atlas_manager.atlas_texture_from_result(&state.sprites_atlas, ar^)
 		assert(ar.uv_dims != {})
 		return SDD {
@@ -23,25 +28,26 @@ draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite:
 		}
 	}
 
-	dims := [2]f32{300,300}
+	dims := [2]f32{300, 300}
 
 	// TODO: remove
 	red := v4{1.0, 0.0, 0.0, 1.0}
 	green := v4{0.0, 1.0, 0.0, 1.0}
 	blue := v4{0.0, 0.0, 1.0, 1.0}
-	white := v4{1.0,1.0,1.0,1.0}
-	colors := [?][4]f32 {
-		red,green,blue,white,
-	}
+	white := v4{1.0, 1.0, 1.0, 1.0}
+	colors := [?][4]f32{red, green, blue, white}
+
+	frame := &sprite.frames[frame_idx]
 
 	// Draw base
 	if sprite_frame_has_base(frame) {
-		base_sdd := sdd_from_sprite_asset(&frame.base, dims, {1.0,1.0,1.0,1.0}, z = -1)
+		base_sdd := sdd_from_sprite_frame_layer(&frame.base, dims, {1.0, 1.0, 1.0, 1.0}, z = -1)
 		append(sprite_draw_data, base_sdd)
 	}
 	// Draw mods
 	for &mod, mod_idx in frame.mods {
-		sdd := sdd_from_sprite_asset(&mod, dims, colors[mod_idx], f32(mod_idx))
+		tint := sprite.sprite_asset.mod_colors[frame_idx][mod_idx]
+		sdd := sdd_from_sprite_frame_layer(&mod, dims, tint, f32(mod_idx))
 		append(sprite_draw_data, sdd)
 	}
 

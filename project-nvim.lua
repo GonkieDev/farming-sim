@@ -47,7 +47,7 @@ local commands = {
 	OdinDocsRaylib = { cmd = open_url .. "https://pkg.odin-lang.org/vendor/raylib", key = "<leader>dr" },
 	OdinDocsOpenGL = { cmd = open_url .. "https://pkg.odin-lang.org/vendor/OpenGL", key = "<leader>dg" },
 
-	OpenDebugger = { cmd = "raddbg -profile:debugger.raddbg_profile" },
+	OpenDebugger = { cmd = "raddbg --project:farming-sim.raddbg_project" },
 	-- PackageAsepritePlugin = { cmd = "aseprite_plugin\\package_aseprite_plugin.bat", key = "<F3>" },
 }
 

@@ -482,5 +482,3 @@ unlock_and_show_cursor :: proc() {
 	// Unlock
 	win32.ClipCursor(nil)
 }
-
-import "core:fmt"
