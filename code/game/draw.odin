@@ -5,7 +5,7 @@ import render "engine:render"
 draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite: ^Sprite) {
 	SDD :: render.Sprite_Draw_Data
 
-	frame_idx := 1
+	frame_idx := 0
 
 	sdd_from_sprite_frame_layer :: proc(
 		layer: ^Sprite_Frame_Layer,
@@ -45,7 +45,7 @@ draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite:
 	}
 	// Draw mods
 	for &mod, mod_idx in frame.mods {
-		tint := sprite.sprite_asset.mod_colors[1][mod_idx]
+		tint := sprite.sprite_asset.mod_colors[0][mod_idx]
 		sdd := sdd_from_sprite_frame_layer(&mod, dims, tint, f32(mod_idx))
 		append(sprite_draw_data, sdd)
 	}

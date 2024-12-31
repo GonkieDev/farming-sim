@@ -1,0 +1,15 @@
+[[Body South]]
+colors: Body Colors
+path: player/South
+
+[[Body North]]
+colors: Body Colors
+path: player/North
+
+[[Body East]]
+colors: Body Colors
+path: player/East
+
+[[Body West]]
+colors: Body Colors
+path: player/West

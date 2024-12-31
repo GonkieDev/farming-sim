@@ -11,6 +11,11 @@ breakpoint:
   location: ("code/render/gl/render_gl_shader.odin":25)
 }
 
+breakpoint:
+{
+  location: ("code/game/sprite.odin":30)
+}
+
 /// targets ///////////////////////////////////////////////////////////////////
 
 target:
@@ -31,7 +36,6 @@ recent_file: "../../../../../dev/survival-shooter/code/assets/textures/textures.
 recent_file: "../../../../../dev/farming-sim/debugger.raddbg_profile"
 recent_file: "code/game/game.odin"
 recent_file: "../../Program Files/odin/base/runtime/error_checks.odin"
-recent_file: "code/game/sprite.odin"
 recent_file: "../../Program Files/odin/base/runtime/internal.odin"
 recent_file: "code/game/sprite_meta_loader.odin"
 recent_file: "../../Program Files/odin/vendor/opengl/wrappers.odin"
@@ -39,6 +43,7 @@ recent_file: "code/render/gl/render_gl_debug_callback.odin"
 recent_file: "code/render/render.odin"
 recent_file: "code/render/gl/render_gl.odin"
 recent_file: "code/render/gl/render_gl_shader.odin"
+recent_file: "code/game/sprite.odin"
 
 /// exception code filters ////////////////////////////////////////////////////
 

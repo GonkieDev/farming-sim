@@ -20,9 +20,9 @@ local commands = {
 	},
 
 	BuildAsepriteExporter = {
-		cmd = ".\\code\\aseprite_exporter\\build.bat debug",
+		cmd = ".\\tools\\aseprite_exporter\\build.bat debug",
 		errorformat = "Odin",
-		key = "<F10>",
+		key = "<F9>",
 	},
 
 	--
@@ -34,7 +34,7 @@ local commands = {
 	},
 
 	RunAsepriteExporter = {
-		cmd = ".\\code\\aseprite_exporter\\build.bat run",
+		cmd = ".\\tools\\aseprite_exporter\\aseprite_exporter.exe assets/player.aseprite assets/player",
 		errorformat = "Odin",
 		key = "<F1>",
 	},

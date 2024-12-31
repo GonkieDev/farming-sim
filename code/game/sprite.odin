@@ -28,7 +28,7 @@ sprites: [Sprite_IDs]Sprite
 
 load_sprites :: proc() -> (ok: bool) {
 	player_meta := sprite_meta_load(
-		build_config.ASSETS_PATH + "player_sprite.sprite_meta",
+		build_config.ASSETS_PATH + "player/player.test_sprite_meta",
 	) or_return
 	sprites[.Player_Walk_East] = load_sprite(&player_meta[0]) or_return
 
