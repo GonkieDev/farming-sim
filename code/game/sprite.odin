@@ -2,7 +2,6 @@ package game
 
 import "base:runtime"
 
-import build_config "engine:build_config"
 import image_loader "engine:image_loader"
 import log "engine:log"
 
@@ -27,10 +26,7 @@ Sprite_IDs :: enum {
 sprites: [Sprite_IDs]Sprite
 
 load_sprites :: proc() -> (ok: bool) {
-	player_meta := sprite_meta_load(
-		build_config.ASSETS_PATH + "player/player.test_sprite_meta",
-	) or_return
-	sprites[.Player_Walk_East] = load_sprite(&player_meta[0]) or_return
+	sprites[.Player_Walk_East] = load_sprite(&player_asset_sprite) or_return
 
 	ok = true
 	return

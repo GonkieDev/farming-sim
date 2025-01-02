@@ -1,7 +1,16 @@
-[[Body Colors]]
+[[Body]]
 
 [Colors]
 FFFFFFFF
 00ffFFff
 00_00_ff_ff
 
+[Colors]
+FFFFFFFF
+00_00_ff_ff
+00ffFFff
+
+[Colors]
+00_00_ff_ff
+00ffFFff
+FFFFFFFF

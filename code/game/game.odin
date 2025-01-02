@@ -45,6 +45,7 @@ init :: proc(client_dims: [2]i32) -> bool {
 	state.game_rt = render.render_target_create({.DepthStencil}, client_dims) or_return
 	atlas_init(&state.sprites_atlas, smallest_size = 16, biggest_size = 128)
 
+	catalogue_init()
 	load_sprites() or_return
 
 	return true
