@@ -18,3 +18,8 @@ line_get_after_colon_space :: proc(line: string) -> string {
 	trimmed := s.trim_space(after_colon)
 	return trimmed
 }
+
+line_get_before_colon :: proc(line: string) -> string {
+	colon_idx := s.index(line, ":")
+	return line[:colon_idx]
+}

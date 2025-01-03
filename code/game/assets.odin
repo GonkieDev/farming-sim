@@ -3,6 +3,8 @@ package game
 import "core:strings"
 import "core:time"
 
+import build_config "engine:build_config"
+
 Asset :: struct {
 	fp: string,
 }
@@ -20,10 +22,17 @@ Asset_Sprite :: struct {
 	mod_colors: [][]Color,
 }
 
-asset_image_from_filepath :: proc(
-	filepath: string,
-	allocator := context.allocator,
-) -> Asset_Image {
+when build_config.HOT_RELOAD {
+	Asset_All_Sprites :: struct {
+		sprites: map[string]Asset_Sprite,
+	}
+} else {
+	Asset_All_Sprites :: struct {
+		sprites: []Asset_Sprite,
+	}
+}
+
+asset_image_from_filepath :: proc(filepath: string, allocator := context.allocator) -> Asset_Image {
 	return Asset_Image{fp = strings.clone(filepath, allocator)}
 }
 

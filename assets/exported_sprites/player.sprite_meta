@@ -1,0 +1,380 @@
+[0]
+
+[[Player_Idle_South]]
+
+[Frame]
+duration: 100
+base: Player_Idle_South_0_non_mod.png
+mod: Player_Idle_South_0_mod_0.png
+mod: Player_Idle_South_0_mod_1.png
+mod: Player_Idle_South_0_mod_2.png
+
+[[Player_Idle_North]]
+
+[Frame]
+duration: 100
+base: Player_Idle_North_0_non_mod.png
+mod: Player_Idle_North_0_mod_0.png
+mod: Player_Idle_North_0_mod_1.png
+
+[[Player_Idle_East]]
+
+[Frame]
+duration: 100
+base: Player_Idle_East_0_non_mod.png
+mod: Player_Idle_East_0_mod_0.png
+mod: Player_Idle_East_0_mod_1.png
+mod: Player_Idle_East_0_mod_2.png
+
+[[Player_Idle_Underwear_South]]
+
+[Frame]
+duration: 100
+base: Player_Idle_Underwear_South_0_non_mod.png
+mod: Player_Idle_Underwear_South_0_mod_0.png
+mod: Player_Idle_Underwear_South_0_mod_1.png
+
+[[Player_Idle_Underwear_North]]
+
+[Frame]
+duration: 100
+base: Player_Idle_Underwear_North_0_non_mod.png
+mod: Player_Idle_Underwear_North_0_mod_0.png
+mod: Player_Idle_Underwear_North_0_mod_1.png
+
+[[Player_Idle_Underwear_East]]
+
+[Frame]
+duration: 100
+base: Player_Idle_Underwear_East_0_non_mod.png
+mod: Player_Idle_Underwear_East_0_mod_0.png
+mod: Player_Idle_Underwear_East_0_mod_1.png
+
+[[Player_Walk_South]]
+
+[Frame]
+duration: 100
+base: Player_Walk_South_1_non_mod.png
+mod: Player_Walk_South_1_mod_0.png
+mod: Player_Walk_South_1_mod_1.png
+mod: Player_Walk_South_1_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_2_non_mod.png
+mod: Player_Walk_South_2_mod_0.png
+mod: Player_Walk_South_2_mod_1.png
+mod: Player_Walk_South_2_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_3_non_mod.png
+mod: Player_Walk_South_3_mod_0.png
+mod: Player_Walk_South_3_mod_1.png
+mod: Player_Walk_South_3_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_4_non_mod.png
+mod: Player_Walk_South_4_mod_0.png
+mod: Player_Walk_South_4_mod_1.png
+mod: Player_Walk_South_4_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_5_non_mod.png
+mod: Player_Walk_South_5_mod_0.png
+mod: Player_Walk_South_5_mod_1.png
+mod: Player_Walk_South_5_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_6_non_mod.png
+mod: Player_Walk_South_6_mod_0.png
+mod: Player_Walk_South_6_mod_1.png
+mod: Player_Walk_South_6_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_7_non_mod.png
+mod: Player_Walk_South_7_mod_0.png
+mod: Player_Walk_South_7_mod_1.png
+mod: Player_Walk_South_7_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_South_8_non_mod.png
+mod: Player_Walk_South_8_mod_0.png
+mod: Player_Walk_South_8_mod_1.png
+mod: Player_Walk_South_8_mod_2.png
+
+[[Player_Walk_North]]
+
+[Frame]
+duration: 100
+base: Player_Walk_North_1_non_mod.png
+mod: Player_Walk_North_1_mod_0.png
+mod: Player_Walk_North_1_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_2_non_mod.png
+mod: Player_Walk_North_2_mod_0.png
+mod: Player_Walk_North_2_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_3_non_mod.png
+mod: Player_Walk_North_3_mod_0.png
+mod: Player_Walk_North_3_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_4_non_mod.png
+mod: Player_Walk_North_4_mod_0.png
+mod: Player_Walk_North_4_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_5_non_mod.png
+mod: Player_Walk_North_5_mod_0.png
+mod: Player_Walk_North_5_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_6_non_mod.png
+mod: Player_Walk_North_6_mod_0.png
+mod: Player_Walk_North_6_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_7_non_mod.png
+mod: Player_Walk_North_7_mod_0.png
+mod: Player_Walk_North_7_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_North_8_non_mod.png
+mod: Player_Walk_North_8_mod_0.png
+mod: Player_Walk_North_8_mod_1.png
+
+[[Player_Walk_East]]
+
+[Frame]
+duration: 100
+base: Player_Walk_East_1_non_mod.png
+mod: Player_Walk_East_1_mod_0.png
+mod: Player_Walk_East_1_mod_1.png
+mod: Player_Walk_East_1_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_2_non_mod.png
+mod: Player_Walk_East_2_mod_0.png
+mod: Player_Walk_East_2_mod_1.png
+mod: Player_Walk_East_2_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_3_non_mod.png
+mod: Player_Walk_East_3_mod_0.png
+mod: Player_Walk_East_3_mod_1.png
+mod: Player_Walk_East_3_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_4_non_mod.png
+mod: Player_Walk_East_4_mod_0.png
+mod: Player_Walk_East_4_mod_1.png
+mod: Player_Walk_East_4_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_5_non_mod.png
+mod: Player_Walk_East_5_mod_0.png
+mod: Player_Walk_East_5_mod_1.png
+mod: Player_Walk_East_5_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_6_non_mod.png
+mod: Player_Walk_East_6_mod_0.png
+mod: Player_Walk_East_6_mod_1.png
+mod: Player_Walk_East_6_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_7_non_mod.png
+mod: Player_Walk_East_7_mod_0.png
+mod: Player_Walk_East_7_mod_1.png
+mod: Player_Walk_East_7_mod_2.png
+
+[Frame]
+duration: 100
+base: Player_Walk_East_8_non_mod.png
+mod: Player_Walk_East_8_mod_0.png
+mod: Player_Walk_East_8_mod_1.png
+mod: Player_Walk_East_8_mod_2.png
+
+[[Player_Walk_Underwear_South]]
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_1_non_mod.png
+mod: Player_Walk_Underwear_South_1_mod_0.png
+mod: Player_Walk_Underwear_South_1_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_2_non_mod.png
+mod: Player_Walk_Underwear_South_2_mod_0.png
+mod: Player_Walk_Underwear_South_2_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_3_non_mod.png
+mod: Player_Walk_Underwear_South_3_mod_0.png
+mod: Player_Walk_Underwear_South_3_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_4_non_mod.png
+mod: Player_Walk_Underwear_South_4_mod_0.png
+mod: Player_Walk_Underwear_South_4_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_5_non_mod.png
+mod: Player_Walk_Underwear_South_5_mod_0.png
+mod: Player_Walk_Underwear_South_5_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_6_non_mod.png
+mod: Player_Walk_Underwear_South_6_mod_0.png
+mod: Player_Walk_Underwear_South_6_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_7_non_mod.png
+mod: Player_Walk_Underwear_South_7_mod_0.png
+mod: Player_Walk_Underwear_South_7_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_South_8_non_mod.png
+mod: Player_Walk_Underwear_South_8_mod_0.png
+mod: Player_Walk_Underwear_South_8_mod_1.png
+
+[[Player_Walk_Underwear_North]]
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_1_non_mod.png
+mod: Player_Walk_Underwear_North_1_mod_0.png
+mod: Player_Walk_Underwear_North_1_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_2_non_mod.png
+mod: Player_Walk_Underwear_North_2_mod_0.png
+mod: Player_Walk_Underwear_North_2_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_3_non_mod.png
+mod: Player_Walk_Underwear_North_3_mod_0.png
+mod: Player_Walk_Underwear_North_3_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_4_non_mod.png
+mod: Player_Walk_Underwear_North_4_mod_0.png
+mod: Player_Walk_Underwear_North_4_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_5_non_mod.png
+mod: Player_Walk_Underwear_North_5_mod_0.png
+mod: Player_Walk_Underwear_North_5_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_6_non_mod.png
+mod: Player_Walk_Underwear_North_6_mod_0.png
+mod: Player_Walk_Underwear_North_6_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_7_non_mod.png
+mod: Player_Walk_Underwear_North_7_mod_0.png
+mod: Player_Walk_Underwear_North_7_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_North_8_non_mod.png
+mod: Player_Walk_Underwear_North_8_mod_0.png
+mod: Player_Walk_Underwear_North_8_mod_1.png
+
+[[Player_Walk_Underwear_East]]
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_1_non_mod.png
+mod: Player_Walk_Underwear_East_1_mod_0.png
+mod: Player_Walk_Underwear_East_1_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_2_non_mod.png
+mod: Player_Walk_Underwear_East_2_mod_0.png
+mod: Player_Walk_Underwear_East_2_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_3_non_mod.png
+mod: Player_Walk_Underwear_East_3_mod_0.png
+mod: Player_Walk_Underwear_East_3_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_4_non_mod.png
+mod: Player_Walk_Underwear_East_4_mod_0.png
+mod: Player_Walk_Underwear_East_4_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_5_non_mod.png
+mod: Player_Walk_Underwear_East_5_mod_0.png
+mod: Player_Walk_Underwear_East_5_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_6_non_mod.png
+mod: Player_Walk_Underwear_East_6_mod_0.png
+mod: Player_Walk_Underwear_East_6_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_7_non_mod.png
+mod: Player_Walk_Underwear_East_7_mod_0.png
+mod: Player_Walk_Underwear_East_7_mod_1.png
+
+[Frame]
+duration: 100
+base: Player_Walk_Underwear_East_8_non_mod.png
+mod: Player_Walk_Underwear_East_8_mod_0.png
+mod: Player_Walk_Underwear_East_8_mod_1.png
+
+[[Player_Run_South]]
+
+[[Player_Run_North]]
+
+[[Player_Run_East]]
+
+[[Player_Run_Underwear_South]]
+
+[[Player_Run_Underwear_North]]
+
+[[Player_Run_Underwear_East]]
+

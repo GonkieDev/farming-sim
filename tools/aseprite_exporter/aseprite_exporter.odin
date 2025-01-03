@@ -11,9 +11,7 @@ import s "core:strings"
 import ase "./aseprite"
 import stb_image "vendor:stb/image"
 
-ASEPRITE_EXPOTER_DEBUG :: ODIN_DEBUG
-
-output_dir: string = "./aseprite_export"
+ASEPRITE_EXPORTER_DEBUG :: ODIN_DEBUG
 
 v2i :: [2]u32
 RGBA :: [4]u8 // NOTE: max color depth in aseprite is 32bpp
@@ -52,15 +50,6 @@ Raw_Animation :: struct {
 	//n = Plays N times
 }
 
-Error :: enum {
-	None,
-	Failed_To_Read_File,
-	Failed_To_Unmarshal_File,
-	Dont_Support_Grayscale,
-	Broken_Folder,
-	No_Export_Folders_Found,
-}
-
 Option :: enum {
 	Log_Layers,
 	Log_Tags,
@@ -90,88 +79,75 @@ Ase_Layer_Group :: struct {
 
 main :: proc() {
 	logger_opts := bit_set[runtime.Logger_Option]{.Level, .Time}
-	when ASEPRITE_EXPOTER_DEBUG {
+	when ASEPRITE_EXPORTER_DEBUG {
 		logger_opts += bit_set[runtime.Logger_Option]{.Short_File_Path, .Line}
 	}
 	context.logger = log.create_console_logger(opt = logger_opts)
 
-	if len(os.args) <= 1 {
-		log.error("No input file provided.")
-		log.info("Usage:")
-		log.info("\taseprite_exporter.exe in_file.aseprite /path/to/output_dir")
-		log.infof("\tProvided: %s", os.args)
-		return
-	}
+	log.info("Aseprite Exporter starting...")
 
-	if len(os.args) <= 2 {
-		log.info("No output path provided, assuming default.")
-	} else {
-		output_dir = os.args[2]
-	}
-
-	filename := os.args[1]
-	log.infof("Exporting %s to dir %s", filename, output_dir)
-
-	//options := Options{.Log_Tags, .Log_Layers, .Output_To_File}
 	options := Options{}
 	log.infof("Options: %v", options)
 
-	os.make_directory(output_dir)
+	//output_dir := "assets/exported_sprites/"
+	output_dir := "assets/exported_sprites/"
+	log.infof("Output dir: '%s'", output_dir)
+	if !os.exists(output_dir) {
+		log.fatal("Output dir does not xist")
+		return
+	}
 
-	_, _, err := ase_export_from_file(filename, options)
-	if err == nil {
-		log.info("Finished successfully.")
-	} else {
-		log.infof("Failure: %v", err)
+	{
+		filename := "assets/player.aseprite"
+		filename_stem := filepath.stem(filename)
+
+		images_output_dir := s.concatenate({output_dir, filename_stem}, context.temp_allocator)
+		if !os.exists(images_output_dir) {
+			if os.make_directory(images_output_dir) != nil {
+				log.panicf("Failed to create directory '%s'", images_output_dir)
+			}
+		}
+
+		meta_output_dir := output_dir
+		meta_filename := s.concatenate({filename_stem, ".sprite_meta"}, context.temp_allocator)
+		meta_filename = filepath.join({output_dir, meta_filename}, context.temp_allocator)
+
+		ase_export_from_file(
+			aseprite_filename = filename,
+			meta_output_filename = meta_filename,
+			images_output_dir = images_output_dir,
+			options = options,
+		)
 	}
 }
 
 ase_export_from_file :: proc(
-	filename: string,
+	aseprite_filename: string,
+	meta_output_filename: string,
+	images_output_dir: string,
 	options := Options{},
 	allocator := context.allocator,
 ) -> (
 	raw_sprites: [dynamic]Raw_Sprite,
 	raw_anims: [dynamic]Raw_Animation,
-	err: Error,
+	ok: bool,
 ) {
-	data, data_ok := os.read_entire_file(filename, context.temp_allocator)
-	if !data_ok {
-		err = .Failed_To_Read_File
+	file_data, file_data_ok := os.read_entire_file(aseprite_filename, context.temp_allocator)
+	if !file_data_ok {
+		log.infof("Failed to read '%s'", aseprite_filename)
 		return
 	}
 
-	meta_name: string
-	{
-		using filepath
-		meta_name = fmt.tprintf("%s.test_sprite_meta", stem(base(filename)))
-	}
-
-	return ase_export_from_buffer(data, meta_name, options, allocator)
-}
-
-ase_export_from_buffer :: proc(
-	file_data: []byte,
-	meta_name: string,
-	options := Options{},
-	allocator := context.allocator,
-) -> (
-	raw_sprites: [dynamic]Raw_Sprite,
-	raw_anims: [dynamic]Raw_Animation,
-	err: Error,
-) {
 	raw_sprites = make([dynamic]Raw_Sprite, allocator)
 	raw_anims = make([dynamic]Raw_Animation, allocator)
 
 	document: ase.Document
 	umerr := ase.unmarshal(&document, file_data[:], context.temp_allocator)
 	if umerr != nil {
-		err = .Failed_To_Unmarshal_File
 		return
 	}
 
 	if document.header.color_depth != .Indexed && document.header.color_depth != .RGBA {
-		err = .Dont_Support_Grayscale
 		return
 	}
 
@@ -181,8 +157,7 @@ ase_export_from_buffer :: proc(
 
 	// Get layer groups
 	layer_groups: [dynamic]Ase_Layer_Group
-	layer_groups, err = layer_groups_from_document(&document, options)
-	if err != nil do return
+	layer_groups = layer_groups_from_document(&document, options) or_return
 
 	// Debug log
 	if .Log_Layers in options {
@@ -198,39 +173,54 @@ ase_export_from_buffer :: proc(
 
 	// Get tags
 	tags: [dynamic]^ase.Tag
-	tags, err = tags_from_document(&document, options)
-	if err != nil do return
+	tags = tags_from_document(&document, options) or_return
 
 	palette: ^ase.Palette_Chunk
 	palette_from_frame(&palette, &document.frames[0])
+
+	get_sprite_base_name :: proc(
+		file_stem: string,
+		tag: ^ase.Tag,
+		layer_group: ^Ase_Layer_Group,
+		allocator := context.temp_allocator,
+	) -> string {
+		sprite_name := s.concatenate({file_stem, tag.name, layer_group.layer_chunk.name}, allocator)
+		sprite_name = s.to_ada_case(sprite_name, allocator)
+		return sprite_name
+	}
 
 	meta: s.Builder
 	s.builder_init(&meta, context.temp_allocator)
 	s.write_string(&meta, "[0]\n\n") // version
 
 	// Create meta string builder for each layer/sprite animation
-	anims_meta := make([]s.Builder, len(layer_groups))
-	for &anim_meta, anim_meta_idx in anims_meta {
-		s.builder_init(&anim_meta, context.temp_allocator)
-	}
+	anims_meta := make([dynamic]s.Builder)
 
 	// Create [[SpriteName]] for each layer
-	for layer_group, layer_group_idx in layer_groups {
-		anim_meta := &anims_meta[layer_group_idx]
-		if layer_group.is_empty || layer_group.is_broken do continue
-		if len(layer_group.layers) <= 0 do continue
-		s.write_string(anim_meta, fmt.tprintf("[[%s]]\n\n", layer_group.layer_chunk.name))
+	sprites_base_name := filepath.stem(aseprite_filename)
+	for tag, tag_idx in tags {
+		for &layer_group, layer_group_idx in layer_groups {
+			append(&anims_meta, s.Builder{})
+			anim_meta := &anims_meta[len(anims_meta) - 1]
+			s.builder_init(anim_meta, context.temp_allocator)
+
+			if layer_group.is_empty || layer_group.is_broken do continue
+			if len(layer_group.layers) <= 0 do continue
+
+			sprite_name := get_sprite_base_name(sprites_base_name, tag, &layer_group)
+			s.write_string(anim_meta, fmt.tprintf("[[%s]]\n\n", sprite_name))
+		}
 	}
 
 	defer {
 		for anim_meta in anims_meta {
 			s.write_string(&meta, s.to_string(anim_meta))
 		}
-		meta_filepath := filepath.join({".", output_dir, meta_name}, context.temp_allocator)
-		log.infof("Writing meta to %s", meta_filepath)
-		os.write_entire_file(meta_filepath, meta.buf[:])
+		log.infof("Writing meta to %s", meta_output_filename)
+		os.write_entire_file(meta_output_filename, meta.buf[:])
 	}
 
+	layers_skipped := 0
 	for &tag, tag_idx in tags {
 		for frame_idx in int(tag.from_frame) ..= int(tag.to_frame) {
 			//s.write_string(tag_meta, "[Frame]\n")
@@ -241,7 +231,11 @@ ase_export_from_buffer :: proc(
 			duration: f32 = f32(frame.header.duration) / 1000.0
 
 			for &layer_group, layer_idx in layer_groups {
-				if layer_group.is_empty || layer_group.is_broken do continue
+				//if layer_group.is_empty || layer_group.is_broken do continue
+				if layer_group.is_empty || layer_group.is_broken || len(layer_group.layers) <= 0 {
+					layers_skipped += 1
+					continue
+				}
 
 				raw_sprite := Raw_Sprite {
 					size = {u32(width), u32(height)},
@@ -270,12 +264,18 @@ ase_export_from_buffer :: proc(
 				process_mod(&raw_sprite, cels[.Mod][:], palette, allocator)
 				//process_normal(&raw_sprite, &layer_group, cels[.Normal][:])
 
-				if len(cels[.Non_Mod]) > 0 || len(cels[.Mod]) > 0 {
-					anim_meta := &anims_meta[layer_idx]
+				if (len(cels[.Non_Mod]) > 0 || len(cels[.Mod]) > 0) {
+					//anim_meta := &anims_meta[len(tags) * layer_idx + tag_idx]
+					//anim_meta := &anims_meta[len(layer_groups) * tag_idx + layer_idx]
+					//anim_meta := &anims_meta[len(layer_groups) * tag_idx + layer_idx - 1]
+					//anim_meta := &anims_meta[layer_idx]
+					anim_meta := &anims_meta[len(layer_groups) * tag_idx + layer_idx]
 					s.write_string(anim_meta, "[Frame]\n")
+					s.write_string(anim_meta, fmt.tprintf("duration: %v\n", int(duration * 1000.0)))
 
-					name := fmt.tprintf("%s_%v", layer_group.layer_chunk.name, frame_idx)
-					write_to_file(output_dir, name, &raw_sprite, options, anim_meta)
+					sprite_name := get_sprite_base_name(sprites_base_name, tag, &layer_group)
+					name := fmt.tprintf("%s_%v", sprite_name, frame_idx)
+					write_to_file(images_output_dir, name, &raw_sprite, options, anim_meta)
 
 					s.write_string(anim_meta, "\n")
 				}
@@ -285,6 +285,7 @@ ase_export_from_buffer :: proc(
 		}
 	}
 
+	ok = true
 	return
 }
 
@@ -348,13 +349,7 @@ process_non_mod :: proc(
 	palette: ^ase.Palette_Chunk,
 	allocator := context.allocator,
 ) {
-	raw_sprite.non_mod = stack_cel_chunks(
-		int(raw_sprite.size.x),
-		int(raw_sprite.size.y),
-		cel_chunks,
-		palette,
-		allocator,
-	)
+	raw_sprite.non_mod = stack_cel_chunks(int(raw_sprite.size.x), int(raw_sprite.size.y), cel_chunks, palette, allocator)
 
 
 }
@@ -365,13 +360,7 @@ process_mod :: proc(
 	palette: ^ase.Palette_Chunk,
 	allocator := context.allocator,
 ) {
-	stacked_pixels := stack_cel_chunks(
-		int(raw_sprite.size.x),
-		int(raw_sprite.size.y),
-		cel_chunks,
-		palette,
-		allocator,
-	)
+	stacked_pixels := stack_cel_chunks(int(raw_sprite.size.x), int(raw_sprite.size.y), cel_chunks, palette, allocator)
 
 	raw_sprite.mod = make([dynamic][]Mod_Pixel, allocator)
 	colors := make([dynamic]RGBA, context.temp_allocator)
@@ -381,10 +370,7 @@ process_mod :: proc(
 		if !color_found {
 			color_idx = len(colors)
 			append(&colors, pixel)
-			append(
-				&raw_sprite.mod,
-				make([]Mod_Pixel, int(raw_sprite.size.x) * int(raw_sprite.size.y), allocator),
-			)
+			append(&raw_sprite.mod, make([]Mod_Pixel, int(raw_sprite.size.x) * int(raw_sprite.size.y), allocator))
 		}
 		//raw_sprite.mod[color_idx][pixel_idx] = 255
 		raw_sprite.mod[color_idx][pixel_idx] = {255, 255, 255, 255}
@@ -409,7 +395,7 @@ layer_groups_from_document :: proc(
 	allocator := context.temp_allocator,
 ) -> (
 	export_groups: [dynamic]Ase_Layer_Group,
-	err: Error,
+	ok: bool,
 ) {
 	export_groups = make([dynamic]Ase_Layer_Group, allocator)
 
@@ -488,7 +474,6 @@ layer_groups_from_document :: proc(
 	}
 
 	if len(export_groups) == 0 {
-		err = .No_Export_Folders_Found
 		return
 	}
 
@@ -509,6 +494,7 @@ layer_groups_from_document :: proc(
 		}
 	}
 
+	ok = true
 	return
 }
 
@@ -518,7 +504,7 @@ tags_from_document :: proc(
 	allocator := context.temp_allocator,
 ) -> (
 	tags: [dynamic]^ase.Tag,
-	err: Error,
+	ok: bool,
 ) {
 	tags = make([dynamic]^ase.Tag, allocator)
 	tagged_frames_count := 0
@@ -543,6 +529,7 @@ tags_from_document :: proc(
 		}
 	}
 
+	ok = true
 	return
 }
 
@@ -563,12 +550,7 @@ layer_attributes_str_from_layer_chunk :: proc(layer_chunk: ^ase.Layer_Chunk) -> 
 	return layer_attributes_str_from_str(layer_chunk.name)
 }
 
-layer_attributes_str_check :: proc(
-	layer_chunk: ^ase.Layer_Chunk,
-) -> (
-	ignore: bool,
-	type: Ase_Layer_Type,
-) {
+layer_attributes_str_check :: proc(layer_chunk: ^ase.Layer_Chunk) -> (ignore: bool, type: Ase_Layer_Type) {
 	atribs := layer_attributes_str_from_layer_chunk(layer_chunk)
 	is_normal := s.contains(atribs, "N")
 	is_mod := s.contains(atribs, "M")

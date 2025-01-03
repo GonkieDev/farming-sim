@@ -44,7 +44,7 @@ if not exist "%build_dir%" mkdir "%build_dir%"
 :: --- Build Engine -----------------------------------------------------------
 pushd "%build_dir%"
 
-set extra_flags=-strict-style -vet-style -vet-semicolon -vet-unused-imports -collection:engine=%src_dir%
+set extra_flags=-strict-style -vet-style -vet-semicolon -collection:engine=%src_dir%
 if "%debug%"=="1" set extra_flags=%extra_flags% -debug -o:none
 if "%release%"=="1" set extra_flags=%extra_flags% -o:speed -no-bounds-check -subsystem:windows
 

@@ -2,18 +2,20 @@
 
 /// watches ///////////////////////////////////////////////////////////////////
 
-watch: "sprite_asset"
+watch: "p.line"
+watch: "p.line_kind"
+watch: "p.curr_mods.len"
+watch: "p.curr_frames.len"
+watch: "p.section_kind"
+watch: "frame.base"
+watch: "0.0322265625"
+watch: "64.0/1024.0"
 
 /// breakpoints ///////////////////////////////////////////////////////////////
 
 breakpoint:
 {
-  location: ("code/render/gl/render_gl_shader.odin":25)
-}
-
-breakpoint:
-{
-  location: ("code/game/sprite.odin":30)
+  location: ("code/game/draw.odin":30)
 }
 
 /// targets ///////////////////////////////////////////////////////////////////
@@ -35,7 +37,6 @@ recent_file: "../../../../../dev/survival-shooter/code/win32/win32_main.odin"
 recent_file: "../../../../../dev/survival-shooter/code/assets/textures/textures.odin"
 recent_file: "../../../../../dev/farming-sim/debugger.raddbg_profile"
 recent_file: "code/game/game.odin"
-recent_file: "../../Program Files/odin/base/runtime/error_checks.odin"
 recent_file: "../../Program Files/odin/base/runtime/internal.odin"
 recent_file: "code/game/sprite_meta_loader.odin"
 recent_file: "../../Program Files/odin/vendor/opengl/wrappers.odin"
@@ -43,7 +44,12 @@ recent_file: "code/render/gl/render_gl_debug_callback.odin"
 recent_file: "code/render/render.odin"
 recent_file: "code/render/gl/render_gl.odin"
 recent_file: "code/render/gl/render_gl_shader.odin"
+recent_file: "../../Program Files/odin/base/runtime/entry_windows.odin"
+recent_file: "../../Program Files/odin/base/runtime/dynamic_map_internal.odin"
+recent_file: "../../Program Files/odin/base/runtime/error_checks.odin"
 recent_file: "code/game/sprite.odin"
+recent_file: "code/game/assets_sprite_meta.odin"
+recent_file: "code/game/draw.odin"
 
 /// exception code filters ////////////////////////////////////////////////////
 

@@ -13,11 +13,11 @@ local commands = {
 		errorformat = "Odin",
 	},
 
-	BuildRelease = {
-		cmd = "build.bat release",
-		errorformat = "Odin",
-		key = "<F9>",
-	},
+	-- BuildRelease = {
+	-- 	cmd = "build.bat release",
+	-- 	errorformat = "Odin",
+	-- 	key = "<F9>",
+	-- },
 
 	BuildAsepriteExporter = {
 		cmd = ".\\tools\\aseprite_exporter\\build.bat debug",
@@ -34,7 +34,7 @@ local commands = {
 	},
 
 	RunAsepriteExporter = {
-		cmd = ".\\tools\\aseprite_exporter\\aseprite_exporter.exe assets/player.aseprite assets/player",
+		cmd = ".\\tools\\aseprite_exporter\\aseprite_exporter.exe assets/player.aseprite assets/exported_sprites/",
 		errorformat = "Odin",
 		key = "<F1>",
 	},
@@ -48,6 +48,7 @@ local commands = {
 	OdinDocsOpenGL = { cmd = open_url .. "https://pkg.odin-lang.org/vendor/OpenGL", key = "<leader>dg" },
 
 	OpenDebugger = { cmd = "raddbg --project:farming-sim.raddbg_project" },
+	AsepriteExporterOpenDebugger = { cmd = "raddbg --project:aseprite_exporter.raddbg_project" },
 	-- PackageAsepritePlugin = { cmd = "aseprite_plugin\\package_aseprite_plugin.bat", key = "<F3>" },
 }
 

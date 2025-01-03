@@ -2,6 +2,7 @@ package game
 
 import "base:runtime"
 
+import build_config "engine:build_config"
 import image_loader "engine:image_loader"
 import log "engine:log"
 
@@ -23,10 +24,13 @@ Sprite_IDs :: enum {
 	Player_Walk_East,
 }
 
+sprites_assets: Asset_All_Sprites
 sprites: [Sprite_IDs]Sprite
 
 load_sprites :: proc() -> (ok: bool) {
-	sprites[.Player_Walk_East] = load_sprite(&player_asset_sprite) or_return
+	sprite_meta_load(&sprites_assets, build_config.ASSETS_PATH + "exported_sprites/player.sprite_meta") or_return
+	s := &sprites_assets.sprites["Player_Walk_East"]
+	sprites[.Player_Walk_East] = load_sprite(s) or_return
 
 	ok = true
 	return
@@ -80,16 +84,10 @@ load_frame :: proc(sprite_frame_asset: Asset_Sprite_Frame) -> (frame: Sprite_Fra
 	return
 }
 
-load_sprite_frame_layer :: proc(
-	image_asset: Asset_Image,
-	is_mod: bool,
-) -> (
-	sprite_frame_layer: Sprite_Frame_Layer,
-	ok: bool,
-) {
+load_sprite_frame_layer :: proc(image_asset: Asset_Image, is_mod: bool) -> (sprite_frame_layer: Sprite_Frame_Layer, ok: bool) {
 	defer {
 		if !ok {
-			log.errorf(.Sprite, "Failed to load sprite asset %s", image_asset)
+			log.errorf(.Sprite, "Failed to load sprite asset %s", image_asset.fp)
 		}
 	}
 

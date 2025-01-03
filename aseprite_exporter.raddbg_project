@@ -1,0 +1,105 @@
+// raddbg project file
+
+/// watches ///////////////////////////////////////////////////////////////////
+
+watch: "sprite_asset"
+watch: "filename"
+watch: "filename_base"
+watch: "path"
+watch: "filename_stem"
+watch: "images_output_dir"
+
+/// breakpoints ///////////////////////////////////////////////////////////////
+
+breakpoint:
+{
+  location: ("code/render/gl/render_gl_shader.odin":25)
+}
+
+breakpoint:
+{
+  location: ("code/game/sprite.odin":30)
+}
+
+breakpoint:
+{
+  location: ("tools/aseprite_exporter/aseprite_exporter.odin":136)
+}
+
+/// targets ///////////////////////////////////////////////////////////////////
+
+target:
+{
+  executable: "tools/aseprite_exporter/aseprite_exporter.exe"
+  working_directory: "../farming-sim"
+}
+
+/// recent_files //////////////////////////////////////////////////////////////
+
+recent_file: "../../../../../program files/odin/base/runtime/core_builtin.odin"
+recent_file: "../../../../../program files/odin/core/image/general_os.odin"
+recent_file: "../../../../../program files/odin/base/runtime/core.odin"
+recent_file: "../../../../../program files/odin/core/image/general.odin"
+recent_file: "../../../../../dev/survival-shooter/code/game/game.odin"
+recent_file: "../../../../../dev/survival-shooter/code/win32/win32_main.odin"
+recent_file: "../../../../../dev/survival-shooter/code/assets/textures/textures.odin"
+recent_file: "../../../../../dev/farming-sim/debugger.raddbg_profile"
+recent_file: "code/game/game.odin"
+recent_file: "../../Program Files/odin/base/runtime/error_checks.odin"
+recent_file: "../../Program Files/odin/base/runtime/internal.odin"
+recent_file: "code/game/sprite_meta_loader.odin"
+recent_file: "../../Program Files/odin/vendor/opengl/wrappers.odin"
+recent_file: "code/render/gl/render_gl_debug_callback.odin"
+recent_file: "code/render/render.odin"
+recent_file: "code/render/gl/render_gl.odin"
+recent_file: "code/render/gl/render_gl_shader.odin"
+recent_file: "code/game/sprite.odin"
+recent_file: "../../program files/odin/core/path/filepath/path.odin"
+recent_file: "../../program files/odin/base/runtime/core.odin"
+recent_file: "D:/a/_work/1/s/src/vctools/crt/vcruntime/src/string/amd64/memset.asm"
+recent_file: "tools/aseprite_exporter/aseprite_exporter.odin"
+recent_file: "../../program files/odin/base/runtime/entry_windows.odin"
+
+/// exception code filters ////////////////////////////////////////////////////
+
+exception_code_filters:
+{
+  win32_ctrl_c: 1
+  win32_ctrl_break: 1
+  win32_win_rt_originate_error: 0
+  win32_win_rt_transform_error: 0
+  win32_rpc_call_cancelled: 0
+  win32_datatype_misalignment: 0
+  win32_access_violation: 1
+  win32_in_page_error: 0
+  win32_invalid_handle: 1
+  win32_not_enough_quota: 0
+  win32_illegal_instruction: 0
+  win32_cannot_continue_exception: 0
+  win32_invalid_exception_disposition: 0
+  win32_array_bounds_exceeded: 0
+  win32_floating_point_denormal_operand: 0
+  win32_floating_point_division_by_zero: 0
+  win32_floating_point_inexact_result: 0
+  win32_floating_point_invalid_operation: 0
+  win32_floating_point_overflow: 0
+  win32_floating_point_stack_check: 0
+  win32_floating_point_underflow: 0
+  win32_integer_division_by_zero: 0
+  win32_integer_overflow: 0
+  win32_privileged_instruction: 0
+  win32_stack_overflow: 0
+  win32_unable_to_locate_dll: 0
+  win32_ordinal_not_found: 0
+  win32_entry_point_not_found: 0
+  win32_dll_initialization_failed: 0
+  win32_floating_point_sse_multiple_faults: 0
+  win32_floating_point_sse_multiple_traps: 0
+  win32_assertion_failed: 1
+  win32_module_not_found: 0
+  win32_procedure_not_found: 0
+  win32_sanitizer_error_detected: 1
+  win32_sanitizer_raw_access_violation: 0
+  win32_directx_debug_layer: 1
+}
+
