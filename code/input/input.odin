@@ -70,3 +70,7 @@ is_down :: proc(is: ^Input_State, button_enum: Button_Enum) -> bool {
 	button := is.curr.buttons[button_enum]
 	return bool(button.is_down)
 }
+was_pressed :: proc(is: ^Input_State, button_enum: Button_Enum) -> bool {
+	button := is.curr.buttons[button_enum]
+	return bool(button.is_down) && (button.half_transitions % 2 == 1)
+}

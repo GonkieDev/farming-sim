@@ -5,7 +5,7 @@ import render "engine:render"
 draw_sprite :: proc(sprite_draw_data: ^[dynamic]render.Sprite_Draw_Data, sprite: ^Sprite) {
 	SDD :: render.Sprite_Draw_Data
 
-	frame_idx := 0
+	frame_idx := 2
 
 	sdd_from_sprite_frame_layer :: proc(layer: ^Sprite_Frame_Layer, dims: [2]f32, tint: Color, z: f32) -> render.Sprite_Draw_Data {
 		ar := &layer.atlas_result

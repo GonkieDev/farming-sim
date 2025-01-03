@@ -19,6 +19,7 @@ LogLocation :: enum {
 	Atlas,
 	Sprite,
 	SpriteMeta,
+	ColorsMeta,
 }
 
 create_logger :: proc() -> Logger {
@@ -31,13 +32,7 @@ end_logger :: proc(_: Logger) {
 	debug(.Test, "Logging finished")
 }
 
-log_actual :: proc(
-	level: Level,
-	log_location: LogLocation,
-	args: ..any,
-	sep := " ",
-	location := #caller_location,
-) {
+log_actual :: proc(level: Level, log_location: LogLocation, args: ..any, sep := " ", location := #caller_location) {
 	logger := context.logger
 	if logger.procedure == nil || logger.procedure == core_log.nil_logger_proc {
 		return
@@ -51,21 +46,11 @@ log_actual :: proc(
 	logger.procedure(logger.data, level, str, logger.options, location)
 
 	when ODIN_OS == .Windows {
-		win32.OutputDebugStringW(
-			raw_data(
-				win32.utf8_to_utf16(fmt.tprintf("%s\n", str), allocator = context.temp_allocator),
-			),
-		)
+		win32.OutputDebugStringW(raw_data(win32.utf8_to_utf16(fmt.tprintf("%s\n", str), allocator = context.temp_allocator)))
 	}
 }
 
-log_actualf :: proc(
-	level: Level,
-	log_location: LogLocation,
-	fmt_str: string,
-	args: ..any,
-	location := #caller_location,
-) {
+log_actualf :: proc(level: Level, log_location: LogLocation, fmt_str: string, args: ..any, location := #caller_location) {
 	logger := context.logger
 	if logger.procedure == nil || logger.procedure == core_log.nil_logger_proc {
 		return
@@ -79,11 +64,7 @@ log_actualf :: proc(
 	logger.procedure(logger.data, level, str, logger.options, location)
 
 	when ODIN_OS == .Windows {
-		win32.OutputDebugStringW(
-			raw_data(
-				win32.utf8_to_utf16(fmt.tprintf("%s\n", str), allocator = context.temp_allocator),
-			),
-		)
+		win32.OutputDebugStringW(raw_data(win32.utf8_to_utf16(fmt.tprintf("%s\n", str), allocator = context.temp_allocator)))
 		win32.OutputDebugStringW(win32.L("\n"))
 	}
 }
@@ -106,40 +87,20 @@ error :: proc(log_location: LogLocation, args: ..any, sep := " ", location := #c
 	log_actual(.Error, log_location, ..args, sep = sep, location = location)
 }
 
-debugf :: proc(
-	log_location: LogLocation,
-	fmt_str: string,
-	args: ..any,
-	location := #caller_location,
-) {
+debugf :: proc(log_location: LogLocation, fmt_str: string, args: ..any, location := #caller_location) {
 	when ODIN_DEBUG {
 		log_actualf(.Debug, log_location, fmt_str, ..args, location = location)
 	}
 }
 
-infof :: proc(
-	log_location: LogLocation,
-	fmt_str: string,
-	args: ..any,
-	location := #caller_location,
-) {
+infof :: proc(log_location: LogLocation, fmt_str: string, args: ..any, location := #caller_location) {
 	log_actualf(.Info, log_location, fmt_str, ..args, location = location)
 }
 
-warnf :: proc(
-	log_location: LogLocation,
-	fmt_str: string,
-	args: ..any,
-	location := #caller_location,
-) {
+warnf :: proc(log_location: LogLocation, fmt_str: string, args: ..any, location := #caller_location) {
 	log_actualf(.Warning, log_location, fmt_str, ..args, location = location)
 }
 
-errorf :: proc(
-	log_location: LogLocation,
-	fmt_str: string,
-	args: ..any,
-	location := #caller_location,
-) {
+errorf :: proc(log_location: LogLocation, fmt_str: string, args: ..any, location := #caller_location) {
 	log_actualf(.Error, log_location, fmt_str, ..args, location = location)
 }

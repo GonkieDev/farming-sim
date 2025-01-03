@@ -1,0 +1,17 @@
+[0] # version number
+
+[[Player Body]]
+
+[Option]
+# Some comment
+00_00_FF_FF
+00_FF_00_FF
+FF_00_00_FF
+FF_FF_FF_FF
+
+[Option]
+# Some other option
+AA_BB_DD_FF
+EE_00_FF_FF
+DD_AA_22_FF
+FF_FF_FF_FF
